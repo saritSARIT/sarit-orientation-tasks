@@ -7,7 +7,11 @@
   "dependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-jss": "^10.10.0"
+    "react-jss": "^10.10.0",
+    "i18next": "^25.7.3",
+    "lodash": "^4.17.21",
+    "react-i18next": "^16.5.1"
+  
   },
   "devDependencies": {
     "@types/node": "^24.10.1",

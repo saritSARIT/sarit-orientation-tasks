@@ -1,15 +1,12 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import { I18nextProvider } from "react-i18next";
-import App from "./App";
-import i18n from "./assets/i18n";
+import ReactDOM from "react-dom/client";import App from "./App";
+import { initI18 } from "./assets/i18n";
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
+await initI18()
 
 root.render(
   <React.StrictMode>
-    <I18nextProvider i18n={i18n}>
-      <App />
-    </I18nextProvider>
+    <App />
   </React.StrictMode>
 );
