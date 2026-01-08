@@ -7,7 +7,7 @@ To run this application locally, follow these steps:
    ```
    git clone https://github.com/saritSARIT/sarit-orientation-tasks.git
 
-   cd <project-folder>
+   cd Task1
    ```
 
 2. Install dependencies:

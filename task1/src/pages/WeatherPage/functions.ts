@@ -3,7 +3,7 @@ import type { WeatherCardProps } from "@components/WeatherCard/types";
 import {
   MAX_TEMPERATURE,
   MIN_TEMPERATURE,
-} from "@components/WeatherCard/consts";
+} from "@pages/WeatherPage/consts";
 
 export const generateRandomWeather = (city: string): WeatherCardProps => ({
   city,
