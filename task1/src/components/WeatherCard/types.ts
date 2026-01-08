@@ -6,6 +6,6 @@ export type WeatherCardProps = {
   humidity: number;
 };
 
-export type StylesProperties = {
+export type StylesProps = {
   color: Property.Color;
 };

@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { WeatherPage } from "@pages/WeatherPage/WeatherPage";
+import  WeatherPage  from "@pages/WeatherPage";
 
 const App: FC = () => <WeatherPage />;
 

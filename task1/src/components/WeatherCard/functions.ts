@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/no-nested-ternary */
 /* eslint-disable no-nested-ternary */
-
+// Intentional nested ternary for compact conditional mapping
 import {
   COLD_TEMPERATURE,
   NORMAL_TEMPERATURE,

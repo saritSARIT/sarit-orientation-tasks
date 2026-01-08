@@ -124,7 +124,7 @@ export default defineConfig([
       "import/no-anonymous-default-export": "warn",
 
       //var length team convention
-      "id-length": ["warn", { min: 2, max: 30, properties: "never" }],
+      "id-length": ["warn", { min: 2, max: 30, Props: "never" }],
       //comments length doesn't really affect the readability
       "max-len": ["warn", { ignoreComments: true, code: 100 }],
       //tenary is functional
@@ -185,7 +185,7 @@ export default defineConfig([
       //disallowed prefixes team convention
       "unicorn/no-keyword-prefix": [
         "error",
-        { disallowedPrefixes: ["handle"], checkProperties: false },
+        { disallowedPrefixes: ["handle"], checkProps: false },
       ],
       //null is good to have
       "unicorn/no-null": "off",

@@ -2,7 +2,6 @@ import type { FC } from "react";
 import WeatherCard from "@components/WeatherCard";
 import { CITIES } from "./consts";
 import { generateRandomWeather } from "./functions";
-
 import { map } from "lodash/fp";
 import { useStyles } from "./styles";
 
