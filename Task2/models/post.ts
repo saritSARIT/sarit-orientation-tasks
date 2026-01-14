@@ -1,7 +1,7 @@
 import { Schema, model, InferSchemaType } from "mongoose";
-import { IPost } from "../types/Ipost";
+import { Post } from "../types/post";
 
-const postSchema = new Schema<IPost>(
+const postSchema = new Schema<Post>(
   {
     postName: {
       type: String,

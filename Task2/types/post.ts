@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 
-export type IPost = {
+export type Post = {
   _id: Types.ObjectId;
   postName: string;
   userId: Types.ObjectId;
