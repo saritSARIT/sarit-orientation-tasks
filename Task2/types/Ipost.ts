@@ -1,9 +1,9 @@
 import { Document, Types } from "mongoose";
 import { IUser } from "./Iuser";
 
-export interface IPost extends Document {
+export type IPost = Document & {
   postName: string;
-  userId: Types.ObjectId | IUser;
+  userId: Types.ObjectId;
   text: string;
   media?: string;
   likes: number;

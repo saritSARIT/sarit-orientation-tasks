@@ -1,13 +1,11 @@
-import { Schema, model, Types } from "mongoose";
-import { IPost } from "../types/Ipost";
+import { Schema, model,InferSchemaType } from "mongoose";
 
-const postSchema = new Schema<IPost>(
+const postSchema = new Schema(
   {
     postName: {
       type: String,
       required: true,
       index: true,
-      trim: true,
     },
     userId: {
       type: Schema.Types.ObjectId,
@@ -18,7 +16,6 @@ const postSchema = new Schema<IPost>(
       type: String,
       required: true,
       maxlength: 200,
-      trim: true,
     },
     media: {
       type: String,
@@ -34,5 +31,7 @@ const postSchema = new Schema<IPost>(
   }
 );
 
+export type Post = InferSchemaType<typeof postSchema>;
 
-export default model<IPost>("Post", postSchema);
+
+export default model("Post", postSchema);
