@@ -1,6 +1,5 @@
 import { User } from "../types/user";
 
-
 export const validateCreateUser = (data: User) => {
   if (!data.username || !data.displayedName) {
     throw new Error("Missing required fields");

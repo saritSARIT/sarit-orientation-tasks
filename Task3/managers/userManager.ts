@@ -6,8 +6,7 @@ export const UserManager = {
   createUser: async (data: User) => {
     try {
       validateCreateUser(data);
-      const user = await UserRepository.createUser(data);
-      return user;
+      await UserRepository.createUser(data);
     } catch (error: any) {
       console.error("Error in UserManager.createUser:", error);
       throw new Error(error.message);

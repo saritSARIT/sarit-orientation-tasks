@@ -3,8 +3,6 @@ import userRoutes from "./routes/userRoutes";
 import postRoutes from "./routes/postRoutes";
 import "./db";
 
-
-
 const app = express();
 const PORT = 3000;
 

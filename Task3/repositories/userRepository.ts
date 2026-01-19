@@ -7,5 +7,5 @@ export const UserRepository = {
   },
   getAllUsers: async () => {
     return UserModel.find();
-  }
+  },
 };
