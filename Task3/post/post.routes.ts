@@ -6,12 +6,12 @@ import {
 } from "./post.validator";
 import { postController } from "./post.controller";
 
-const router = Router();
+const postRoutes = Router();
 
-router.post("/", validateBody(createPostSchema), postController.createPost);
-router.get("/", postController.getAllPosts);
-router.get("/:id", postController.getPostById);
-router.put("/:id", validateBody(updatePostSchema), postController.updatePost);
-router.delete("/:id", postController.deletePost);
+postRoutes.post("/", validateBody(createPostSchema), postController.createPost);
+postRoutes.get("/", postController.getAllPosts);
+postRoutes.get("/:id", postController.getPostById);
+postRoutes.put("/:id", validateBody(updatePostSchema), postController.updatePost);
+postRoutes.delete("/:id", postController.deletePost);
 
-export default router;
+export default postRoutes;

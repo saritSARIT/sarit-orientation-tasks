@@ -2,22 +2,40 @@
     "compilerOptions": {
         "strict": true,
         "target": "esnext",
-        "module": "esnext",
+        "module": "commonjs",
         "sourceMap": true,
         "outDir": "dist/src",
         "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": true,
-        "moduleResolution": "bundler",
         "skipLibCheck": true,
         "typeRoots": ["./node_modules/@types", "./typings"],
         "esModuleInterop": true,
         "resolveJsonModule": true,
         "noEmit": true,
-        "baseUrl": ".",
-        "paths": { "@Libs/*": ["../../Libs/src/*"] }
+   
+        
     },
     "exclude": ["node_modules"]
 }
 
 
 
+// {
+//     "compilerOptions": {
+//         "target": "esnext",
+//         "module": "commonjs",
+//         "sourceMap": true,
+//         "outDir": "dist/src",
+//         "strict": true,
+//         "forceConsistentCasingInFileNames": true,
+//         "skipLibCheck": true,
+//         "typeRoots": ["./node_modules/@types", "./typings"],
+//         "esModuleInterop": true,
+//         "resolveJsonModule": true,
+ 
+        
+//     },
+//     "exclude": ["node_modules"]
+// }
+ 
+ 

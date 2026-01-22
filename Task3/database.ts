@@ -1,4 +1,7 @@
 import  { connect } from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const databaseUri = process.env.databaseURI ?? "";
 
