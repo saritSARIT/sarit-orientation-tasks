@@ -9,7 +9,7 @@ import unicornPlugin from "eslint-plugin-unicorn";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 import { defineConfig } from "eslint/config";
-
+ 
 const namingConventionOptions = [
   "warn",
   { selector: ["default"], format: ["camelCase"] },
@@ -17,12 +17,12 @@ const namingConventionOptions = [
   { selector: ["import"], format: null },
   { selector: ["typeLike"], format: ["PascalCase"] },
 ];
-
+ 
 const mergeNaming = (...selectors) => [
   ...namingConventionOptions,
   ...selectors,
 ];
-
+ 
 const abbreviationOptions = [
   "warn",
   {
@@ -39,7 +39,7 @@ const abbreviationOptions = [
     },
   },
 ];
-
+ 
 const mergeAbbreviations = (replacements) => [
   abbreviationOptions[0],
   {
@@ -47,26 +47,25 @@ const mergeAbbreviations = (replacements) => [
     replacements: { ...abbreviationOptions[1].replacements, ...replacements },
   },
 ];
-
+ 
 export default defineConfig([
   //don't lint js files
   { ignores: ["**/*.js"] },
   //the order matters, the plugins overwrite each other
   securityPlugin.configs.recommended,
-  unicornPlugin.configs["flat/all"],
+  unicornPlugin.configs.all,
   js.configs.all,
   ...tseslint.configs.all,
   functionalPlugin.configs.all,
   {
     languageOptions: {
-     parserOptions: {
-        project: resolve(__dirname, "tsconfig.json"), 
-        tsconfigRootDir: __dirname,                   
+      parserOptions: {
+        projectService: true,
       },
     },
     //import rules are defined manually as the config objects jam the eslint vscode ui
     plugins: { import: importPlugin },
-
+ 
     settings: {
       //enable ts path alias resolver
       "import/resolver": {
@@ -74,7 +73,7 @@ export default defineConfig([
       },
       react: { version: "detect" },
     },
-
+ 
     rules: {
       //not that important and conflict with prettier
       indent: "off",
@@ -85,26 +84,26 @@ export default defineConfig([
         { overrides: { ":": "before", "?": "before" } },
       ],
       "sort-imports": "off",
-
+ 
       //unnecessary
       "implicit-arrow-linebreak": "off",
       "no-confusing-arrow": "off",
-
+ 
       //handled by ts-eslint naming convention
       camelcase: "off",
       "new-cap": "off",
       "no-underscore-dangle": "off",
-
+ 
       //very interesting rules, but unfortunately not applicable in fullstack
       "functional/functional-parameters": "off",
       "functional/no-return-void": "off",
-
+ 
       //requires defining readonly on tons of variables
       "functional/prefer-immutable-types": "off",
       "functional/type-declaration-immutability": "off",
       "@typescript-eslint/prefer-readonly-parameter-types": "off",
       "react/prefer-read-only-props": "off",
-
+ 
       //import rules are defined manually as the config objects jam the eslint vscode ui:
       "import/export": "error",
       "import/no-empty-named-blocks": "warn",
@@ -122,9 +121,9 @@ export default defineConfig([
       "import/no-unassigned-import": "error",
       "import/no-useless-path-segments": "warn",
       "import/no-anonymous-default-export": "warn",
-
+ 
       //var length team convention
-      "id-length": ["warn", { min: 2, max: 30, Props: "never" }],
+      "id-length": ["warn", { min: 2, max: 30, properties: "never" }],
       //comments length doesn't really affect the readability
       "max-len": ["warn", { ignoreComments: true, code: 100 }],
       //tenary is functional
@@ -185,7 +184,7 @@ export default defineConfig([
       //disallowed prefixes team convention
       "unicorn/no-keyword-prefix": [
         "error",
-        { disallowedPrefixes: ["handle"], checkProps: false },
+        { disallowedPrefixes: ["handle"], checkProperties: false },
       ],
       //null is good to have
       "unicorn/no-null": "off",
@@ -193,32 +192,32 @@ export default defineConfig([
       "unicorn/prefer-export-from": "off",
       //allowed abbreviations team convention
       "unicorn/prevent-abbreviations": abbreviationOptions,
-
+ 
       "unicorn/no-array-sort": "off",
     },
   },
   {
     //frontend configuration
     files: ["Task1/**"],
-
+ 
     languageOptions: { globals: globals.browser },
-
+ 
     plugins: { import: importPlugin, "react-hooks": hooksPlugin },
     extends: [
       queryPlugin.configs["flat/recommended"],
       reactPlugin.configs.flat.all,
     ],
-
+ 
     rules: {
       //deprecated for react 19
       "react/jsx-no-bind": "off",
       "react/react-in-jsx-scope": "off",
-
+ 
       //prevent conflicts with prettier
       "react/jsx-indent-props": "off",
       "react/jsx-indent": "off",
       "react/jsx-closing-tag-location": "off",
-
+ 
       ...hooksPlugin.configs.recommended.rules,
       //props with both data and functions are a must
       "functional/no-mixed-types": "off",
@@ -301,9 +300,9 @@ export default defineConfig([
   },
   {
     //backend configuration
-    files: ["task3/**"],
+    files: ["Task2/**", "Task3/**"],
     languageOptions: { globals: globals.node },
-
+ 
     rules: {
       //console is fine in node
       "no-console": "off",
