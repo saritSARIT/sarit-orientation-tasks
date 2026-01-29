@@ -3,11 +3,14 @@ import userRoutes from "./user/user.routes";
 import postRoutes from "./post/post.routes";
 import { errorHandler } from "./middlewares/errorHandler";
 import { databaseConnect } from "./database";
+import cors from "cors";
 
 const app = express();
 const port = process.env.PORT;
 
 databaseConnect();
+
+app.use(cors({ origin: "http://localhost:5173" }));
 
 app.use(express.json());
 

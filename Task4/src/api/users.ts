@@ -1,22 +1,14 @@
 import type { User } from "../types/user";
 import { api } from "./server";
 
+// מביא את כל המשתמשים
 export const getUsers = async (): Promise<User[]> => {
-  const res = await fetch(`${api}/users`);
-  if (!res.ok) throw new Error("Failed to fetch users");
-  return res.json();
+  const res = await api.get<User[]>("/users");
+  return res.data;
 };
 
-export const createUser = async (data: {
-  username: string;
-  displayedName: string;
-}): Promise<User> => {
-  const res = await fetch(`${api}/users`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-
-  if (!res.ok) throw new Error("Failed to create user");
-  return res.json();
+// יוצר משתמש חדש
+export const createUser = async (data: { username: string; displayedName: string }): Promise<User> => {
+  const res = await api.post<User>("/users", data);
+  return res.data;
 };
