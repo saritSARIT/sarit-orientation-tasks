@@ -1,8 +1,9 @@
 import { FC, useEffect, useState } from "react";
 import { Navbar } from "../../components/Navbar/Navbar";
-import type { User } from "./types";
+import type { User } from "../../types/user";
 import { getUsers } from "../../api/users";
 import { useStyles } from "./styles";
+import Loader from "../../components/Loader";
 
 export const UserPage: FC = () => {
   const classes = useStyles();
@@ -21,7 +22,7 @@ export const UserPage: FC = () => {
         setLoading(false);
       }
     };
-    fetchUsers();
+    fetchUsers(); 
   }, []);
 
   return (
@@ -29,17 +30,19 @@ export const UserPage: FC = () => {
       <Navbar />
       <div className={classes.container}>
         <h1 className={classes.title}>User Page</h1>
-        {loading && <p>Loading...</p>}
-        {error && <p>Error: {error}</p>}
-        {!loading && !error && (
-          <div className={classes.list}>
-            {users.map((user) => (
-              <div key={user._id} className={classes.card}>
-                <h3 className={classes.username}>{user.username}</h3>
-                <p className={classes.displayedName}>{user.displayedName}</p>
-              </div>
-            ))}
-          </div>
+        {loading ? (
+          <Loader />
+        ) : (
+          !error && (
+            <div className={classes.list}>
+              {users.map((user) => (
+                <div key={user._id} className={classes.card}>
+                  <h3 className={classes.username}>{user.username}</h3>
+                  <p className={classes.displayedName}>{user.displayedName}</p>
+                </div>
+              ))}
+            </div>
+          )
         )}
       </div>
     </>

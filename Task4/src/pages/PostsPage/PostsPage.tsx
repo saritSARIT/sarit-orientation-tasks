@@ -3,6 +3,7 @@ import { Navbar } from "../../components/Navbar/Navbar";
 import type { Post } from "../../types/post";
 import { getPosts, deletePost } from "../../api/posts";
 import { useStyles } from "./styles";
+import Loader from "../../components/Loader";
 
 export const PostsPage: FC = () => {
   const classes = useStyles();
@@ -28,7 +29,7 @@ export const PostsPage: FC = () => {
   const handleDelete = async (id: string) => {
     try {
       await deletePost(id);
-      setPosts(posts.filter(post => post._id !== id));
+      setPosts(posts.filter((post) => post._id !== id));
     } catch (err: any) {
       setError(err.message || "Error deleting post");
     }
@@ -39,18 +40,25 @@ export const PostsPage: FC = () => {
       <Navbar />
       <div className={classes.container}>
         <h1 className={classes.title}>Posts Page</h1>
-        {loading && <p>Loading...</p>}
-        {error && <p>Error: {error}</p>}
-        {!loading && !error && (
-          <div className={classes.list}>
-            {posts.map(post => (
-              <div key={post._id} className={classes.card}>
-                <h3 className={classes.postName}>{post.postName}</h3>
-                <p className={classes.text}>{post.text}</p>
-                <button className={classes.button} onClick={() => handleDelete(post._id)}>Delete</button>
-              </div>
-            ))}
-          </div>
+        {loading ? (
+          <Loader />
+        ) : (
+          !error && (
+            <div className={classes.list}>
+              {posts.map((post) => (
+                <div key={post._id} className={classes.card}>
+                  <h3 className={classes.postName}>{post.postName}</h3>
+                  <p className={classes.text}>{post.text}</p>
+                  <button
+                    className={classes.button}
+                    onClick={() => handleDelete(post._id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              ))}
+            </div>
+          )
         )}
       </div>
     </>

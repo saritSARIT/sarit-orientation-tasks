@@ -1,11 +1,18 @@
+import { motion, AnimatePresence } from "framer-motion";
+import { useStyles } from "./styles";
 
+export default function Loader() {
+  const classes = useStyles();
 
-export const Loader = ({ isLoading }: { isLoading: boolean }) => {
-  if (!isLoading) return null;
   return (
-    <div className="loader">
-      <div className="spinner"></div>
+    <div className={classes.loaderContainer}>
+      <AnimatePresence>
+        <motion.div
+          className={classes.loader}
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+        />
+      </AnimatePresence>
     </div>
   );
-};
-
+}
