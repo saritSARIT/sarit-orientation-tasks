@@ -9,24 +9,35 @@ export const useStyles = createUseStyles({
   },
   title: {
     textAlign: "center",
-    marginBottom: "2rem",
+    marginBottom: 30,
   },
   input: {
     width: "100%",
-    padding: "0.5rem",
+    padding: 7,
     marginBottom: "1rem",
-    border: "1px solid #ccc",
+    border: "1px solid #f1ce06",
     borderRadius: 5,
   },
   button: {
-    padding: "0.5rem 1rem",
+    width: "100%",
+    padding: 7,
     border: "none",
     borderRadius: 5,
     cursor: "pointer",
-    backgroundColor: "#007bff",
-    color: "#fff",
+    backgroundColor: "#0b0c0c",
+    color: "#f1ce06",
     "&:hover": {
-      backgroundColor: "#0056b3",
+      backgroundColor: "#f1ce06",
+      color: "#0b0c0c"
     },
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 10,
+  },
+  error: {
+    color: "#0b0c0c",
+    fontSize: 14,
   },
 });

@@ -58,4 +58,13 @@ export const useStyles = createUseStyles({
       backgroundColor: "#0056b3",
     },
   },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem",
+  },
+  error: {
+    color: "red",
+    fontSize: "0.9rem",
+  },
 });

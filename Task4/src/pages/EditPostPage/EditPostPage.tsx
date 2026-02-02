@@ -1,17 +1,17 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { getPosts, updatePost } from "../../api/posts";
+import  PostForm  from "../../components/PostForm";
 import { useStyles } from "./styles";
 import type { Post } from "../../types/post";
 
 export const EditPostPage: FC = () => {
   const classes = useStyles();
+
   const [posts, setPosts] = useState<Post[]>([]);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-  const [postName, setPostName] = useState("");
-  const [text, setText] = useState("");
-  const [media, setMedia] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -19,26 +19,24 @@ export const EditPostPage: FC = () => {
         const data = await getPosts();
         setPosts(data);
       } catch (err: any) {
-        setError(err.message || "Error fetching posts");
+        setError(err.response?.data?.message || "Error fetching posts");
       }
     };
     fetchPosts();
   }, []);
 
-  const handleSelect = (post: Post) => {
-    setSelectedPost(post);
-    setPostName(post.postName);
-    setText(post.text);
-    setMedia(post.media || "");
-  };
-
-  const handleUpdate = async () => {
+  const handleUpdate = async (data: Partial<Post>) => {
     if (!selectedPost) return;
+
+    setLoading(true);
+    setError(null);
     try {
-      await updatePost(selectedPost._id, { postName, text, media: media || undefined });
-      alert("Post updated successfully");
+      await updatePost(selectedPost._id, data);
+      alert("הפוסט עודכן בהצלחה!");
     } catch (err: any) {
-      setError(err.message || "Error updating post");
+      setError(err.response?.data?.message || "Error updating post");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,22 +45,31 @@ export const EditPostPage: FC = () => {
       <Navbar />
       <div className={classes.container}>
         <h1 className={classes.title}>Edit Post</h1>
-        {error && <p>Error: {error}</p>}
+
+        {error && <p className={classes.error}>{error}</p>}
+
         <div className={classes.list}>
-          {posts.map(post => (
+          {posts.map((post) => (
             <div key={post._id} className={classes.card}>
-              <h3 className={classes.postName}>{post.postName}</h3>
-              <button className={classes.button} onClick={() => handleSelect(post)}>Edit</button>
+              <h3>{post.postName}</h3>
+              <button
+                className={classes.button}
+                onClick={() => setSelectedPost(post)}
+              >
+                Edit
+              </button>
             </div>
           ))}
         </div>
+
         {selectedPost && (
-          <>
-            <input className={classes.input} value={postName} onChange={e => setPostName(e.target.value)} />
-            <input className={classes.input} value={text} onChange={e => setText(e.target.value)} />
-            <input className={classes.input} value={media} onChange={e => setMedia(e.target.value)} />
-            <button className={classes.button} onClick={handleUpdate}>Update</button>
-          </>
+          <PostForm
+            initialValues={selectedPost}
+            onSubmit={handleUpdate}
+            submitText="Update Post"
+            loading={loading}
+            error={error}
+          />
         )}
       </div>
     </>

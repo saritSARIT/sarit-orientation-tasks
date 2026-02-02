@@ -1,26 +1,27 @@
 import { FC, useState } from "react";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { createPost } from "../../api/posts";
+import  PostForm  from "../../components/PostForm";
 import { useStyles } from "./styles";
 
 export const CreatePostPage: FC = () => {
   const classes = useStyles();
-  const [postName, setPostName] = useState("");
-  const [text, setText] = useState("");
-  const [userId, setUserId] = useState("");
-  const [media, setMedia] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async () => {
+  const handleCreate = async (data: any) => {
+    setLoading(true);
+    setError(null);
     try {
-      await createPost({ postName, text, userId, media: media || undefined });
-      setPostName("");
-      setText("");
-      setUserId("");
-      setMedia("");
-      alert("Post created successfully");
+      await createPost({
+        ...data,
+        media: data.media || undefined,
+      });
+      alert("Post created successfully!");
     } catch (err: any) {
-      setError(err.message || "Error creating post");
+      setError(err.response?.data?.message || "Error creating post");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -29,12 +30,13 @@ export const CreatePostPage: FC = () => {
       <Navbar />
       <div className={classes.container}>
         <h1 className={classes.title}>Create Post</h1>
-        {error && <p>Error: {error}</p>}
-        <input className={classes.input} placeholder="Post Name" value={postName} onChange={e => setPostName(e.target.value)} />
-        <input className={classes.input} placeholder="Text" value={text} onChange={e => setText(e.target.value)} />
-        <input className={classes.input} placeholder="User ID" value={userId} onChange={e => setUserId(e.target.value)} />
-        <input className={classes.input} placeholder="Media URL" value={media} onChange={e => setMedia(e.target.value)} />
-        <button className={classes.button} onClick={handleSubmit}>Create</button>
+
+        <PostForm
+          onSubmit={handleCreate}
+          submitText="Create Post"
+          loading={loading}
+          error={error}
+        />
       </div>
     </>
   );
