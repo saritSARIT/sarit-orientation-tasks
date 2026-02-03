@@ -2,14 +2,13 @@ import { createUseStyles } from "react-jss";
 
 export const useStyles = createUseStyles({
   container: {
-    maxWidth: 900,
-    margin: "2rem auto",
-    padding: "1rem",
+    margin: "auto",
+    padding: 20,
     fontFamily: "Arial, sans-serif",
   },
   title: {
     textAlign: "center",
-    marginBottom: 30,
+    marginBottom: 15,
   },
   input: {
     width: "100%",
@@ -28,13 +27,8 @@ export const useStyles = createUseStyles({
     color: "#f1ce06",
     "&:hover": {
       backgroundColor: "#f1ce06",
-      color: "#0b0c0c"
+      color: "#0b0c0c",
     },
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 10,
   },
   error: {
     color: "#0b0c0c",

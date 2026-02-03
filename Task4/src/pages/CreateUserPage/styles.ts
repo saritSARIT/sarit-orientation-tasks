@@ -2,38 +2,42 @@ import { createUseStyles } from "react-jss";
 
 export const useStyles = createUseStyles({
   container: {
-    maxWidth: 500,
-    margin: "2rem auto",
-    padding: "1rem",
+    maxWidth: 900,
+    margin: "auto",
+    padding: 20,
     fontFamily: "Arial, sans-serif",
   },
   title: {
     textAlign: "center",
-    marginBottom: "2rem",
+    marginBottom: 15,
   },
   form: {
     display: "flex",
     flexDirection: "column",
-    gap: "1rem",
+    gap: 20,
+    marginTop: 40,
   },
   input: {
-    padding: "0.5rem",
-    fontSize: "1rem",
+    padding: 10,
+    fontSize: 15,
+    borderRadius: 6,
+    border: "1px solid #1f2933",
   },
   button: {
-    padding: "0.5rem",
-    fontSize: "1rem",
-    cursor: "pointer",
-    backgroundColor: "#1f2933",
-    color: "#fff",
+    padding: 12,
+    borderRadius: 6,
     border: "none",
+    cursor: "pointer",
+    background: "#1f2933",
+    color: "#facc15",
+    fontWeight: 600,
     "&:hover": {
-      backgroundColor: "#facc15",
-      color: "#000",
+      background: "#facc15",
+      color: "#1f2933",
     },
   },
   error: {
-    color: "red",
-    fontSize: "0.9rem",
+    color: "#1f2933",
+    textAlign: "center",
   },
 });

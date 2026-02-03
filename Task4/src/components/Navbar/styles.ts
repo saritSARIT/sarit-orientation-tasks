@@ -13,10 +13,8 @@ export const useStyles = createUseStyles({
     textDecoration: "none",
     fontSize: 16,
     fontWeight: 500,
-    transition: "color 0.2s ease",
     "&:hover": {
       color: "#facc15",
     },
   },
 });
-

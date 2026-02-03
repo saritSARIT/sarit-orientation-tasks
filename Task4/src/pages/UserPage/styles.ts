@@ -2,37 +2,32 @@ import { createUseStyles } from "react-jss";
 
 export const useStyles = createUseStyles({
   container: {
-    maxWidth: 900,
-    margin: "2rem auto",
-    padding: "1rem",
+    padding: 50,
     fontFamily: "Arial, sans-serif",
   },
   title: {
     textAlign: "center",
-    marginBottom: "2rem",
+    marginBottom: 50,
   },
   list: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-    gap: "1rem",
+    display: "flex",
+    justifyContent: "center",
+    gap: 30,
   },
   card: {
-    border: "1px solid #ccc",
+    border: "1px solid #facc15",
     borderRadius: 10,
-    padding: "1rem",
-    backgroundColor: "#f9f9f9",
-    transition: "box-shadow 0.2s ease",
-    "&:hover": {
-      boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
-    },
+    padding: 20,
+    backgroundColor: "#1f2933",
+    width: 200,
   },
   username: {
     margin: 0,
-    fontSize: "1.2rem",
-    color: "#333",
+    fontSize: 25,
+    color: "#facc15",
   },
   displayedName: {
-    margin: "0.3rem 0 0 0",
-    color: "#555",
+    margin: 0,
+    color: "#facc15",
   },
 });

@@ -22,7 +22,7 @@ export const UserPage: FC = () => {
         setLoading(false);
       }
     };
-    fetchUsers(); 
+    fetchUsers();
   }, []);
 
   return (

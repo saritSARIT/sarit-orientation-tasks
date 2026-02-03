@@ -26,11 +26,19 @@ export const PostsPage: FC = () => {
     fetchPosts();
   }, []);
 
+  const getYouTubeId = (url: string) => {
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11 ? match[2] : "";
+  };
+
   return (
     <>
       <Navbar />
       <div className={classes.container}>
         <h1 className={classes.title}>Posts Page</h1>
+
         {loading ? (
           <Loader />
         ) : error ? (
@@ -41,17 +49,41 @@ export const PostsPage: FC = () => {
               <div key={post._id} className={classes.card}>
                 <h3 className={classes.postName}>{post.postName}</h3>
                 <p className={classes.text}>{post.text}</p>
-                <p><strong>User:</strong> {post.userId}</p>
-                <p><strong>Likes:</strong> {post.likes}</p>
-                <p><strong>Created At:</strong> {new Date(post.createdAt).toLocaleString()}</p>
+                <p>
+                  <strong>User:</strong> {post.userId}
+                </p>
+                <p>
+                  <strong>Likes:</strong> {post.likes}
+                </p>
+                <p>
+                  <strong>Created At:</strong>{" "}
+                  {new Date(post.createdAt).toLocaleString()}
+                </p>
 
-                {post.media && (
-                  <video 
-                    src={post.media} 
-                    controls 
-                    style={{ maxWidth: "100%", marginTop: "10px" }}
-                  />
-                )}
+                {post.media &&
+                  (post.media.includes("youtube.com") ||
+                  post.media.includes("youtu.be") ? (
+                    <iframe
+                      width="100%"
+                      height="315"
+                      src={`https://www.youtube.com/embed/${getYouTubeId(post.media)}`}
+                      title="YouTube video"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      style={{ marginTop: "10px", borderRadius: "8px" }}
+                    />
+                  ) : (
+                    <video
+                      src={post.media}
+                      controls
+                      style={{
+                        maxWidth: "100%",
+                        marginTop: "10px",
+                        borderRadius: "8px",
+                      }}
+                    />
+                  ))}
               </div>
             ))}
           </div>

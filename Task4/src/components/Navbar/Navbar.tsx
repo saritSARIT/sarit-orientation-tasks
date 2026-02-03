@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { useStyles } from "./styles";
+import type { FC } from "react";
 
-export const Navbar = () => {
-
+export const Navbar: FC = () => {
   const classes = useStyles();
 
   return (

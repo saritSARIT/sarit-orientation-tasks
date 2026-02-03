@@ -1,9 +1,9 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useStyles } from "./styles";
+import type { FC } from "react";
 
-export default function Loader() {
+export const Loader: FC = () => {
   const classes = useStyles();
-
   return (
     <div className={classes.loaderContainer}>
       <AnimatePresence>
@@ -15,4 +15,4 @@ export default function Loader() {
       </AnimatePresence>
     </div>
   );
-}
+};

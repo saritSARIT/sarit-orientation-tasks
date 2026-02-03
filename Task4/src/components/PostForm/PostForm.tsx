@@ -1,14 +1,8 @@
-import { FC, useEffect, useState } from "react";
-import type { Post } from "../../types/post";
+import { FC } from "react";
+import { useForm } from "react-hook-form";
+import type { Post, PostPayload } from "../../types/post";
 import { useStyles } from "./styles";
-
-interface PostFormProps {
-  initialValues?: Partial<Post>;
-  onSubmit: (data: Partial<Post>) => Promise<void>;
-  submitText: string;
-  loading: boolean;
-  error?: string | null;
-}
+import type { PostFormProps } from "./types";
 
 export const PostForm: FC<PostFormProps> = ({
   initialValues,
@@ -19,74 +13,81 @@ export const PostForm: FC<PostFormProps> = ({
 }) => {
   const classes = useStyles();
 
-  const [postName, setPostName] = useState("");
-  const [text, setText] = useState("");
-  const [likes, setLikes] = useState(0);
-  const [userId, setUserId] = useState("");
-  const [media, setMedia] = useState("");
+  const { register, handleSubmit } = useForm<PostPayload>({
+    defaultValues: initialValues || {
+      postName: "",
+      text: "",
+      likes: 0,
+      userId: "",
+      media: "",
+    },
+  });
 
-  // מילוי ערכים בעריכה
-  useEffect(() => {
+  const onFormSubmit = async (data: PostPayload) => {
     if (initialValues) {
-      setPostName(initialValues.postName || "");
-      setText(initialValues.text || "");
-      setLikes(initialValues.likes || 0);
-      setUserId(initialValues.userId || "");
-      setMedia(initialValues.media || "");
-    }
-  }, [initialValues]);
+      const updatedData: Partial<PostPayload> = {};
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await onSubmit({
-      postName,
-      text,
-      likes,
-      userId,
-      media: media || "",
-    });
+      if (
+        data.postName !== undefined &&
+        data.postName !== initialValues.postName
+      ) {
+        updatedData.postName = data.postName;
+      }
+      if (data.text !== undefined && data.text !== initialValues.text) {
+        updatedData.text = data.text;
+      }
+      if (data.likes !== undefined && data.likes !== initialValues.likes) {
+        updatedData.likes = data.likes;
+      }
+      if (data.userId !== undefined && data.userId !== initialValues.userId) {
+        updatedData.userId = data.userId;
+      }
+      if ((data.media ?? "") !== (initialValues.media ?? "")) {
+        updatedData.media = data.media;
+      }
+
+      if (Object.keys(updatedData).length === 0) {
+        alert("לא בוצעו שינויים");
+        return;
+      }
+
+      await onSubmit(updatedData as PostPayload);
+    } else {
+      await onSubmit(data as Post);
+    }
   };
 
   return (
-    <form className={classes.form} onSubmit={handleSubmit}>
+    <form className={classes.form} onSubmit={handleSubmit(onFormSubmit)}>
       <input
+        {...register("postName", { required: true })}
         className={classes.input}
         placeholder="Post Name"
-        value={postName}
-        onChange={(e) => setPostName(e.target.value)}
-        required
       />
 
       <input
+        {...register("text", { required: true })}
         className={classes.input}
         placeholder="Text"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        required
       />
 
       <input
+        type="number"
+        {...register("likes")}
         className={classes.input}
         placeholder="Likes"
-        type="number"
-        value={likes}
-        onChange={(e) => setLikes(Number(e.target.value) || 0)}
-        required
       />
 
       <input
+        {...register("userId", { required: true })}
         className={classes.input}
         placeholder="User ID"
-        value={userId}
-        onChange={(e) => setUserId(e.target.value)}
-        required
       />
 
       <input
+        {...register("media")}
         className={classes.input}
         placeholder="Media URL (optional)"
-        value={media}
-        onChange={(e) => setMedia(e.target.value)}
       />
 
       <button className={classes.button} type="submit" disabled={loading}>

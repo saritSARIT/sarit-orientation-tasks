@@ -1,4 +1,4 @@
-import type { Post } from "../types/post";
+import type { Post, PostPayload } from "../types/post";
 import { api } from "./server";
 
 export const getPosts = async (): Promise<Post[]> => {
@@ -7,13 +7,7 @@ export const getPosts = async (): Promise<Post[]> => {
 };
 
 // יוצר פוסט חדש
-export const createPost = async (data: {
-  postName: string;
-  text: string;
-  likes: number;
-  userId: string;
-  media?: string;
-}): Promise<Post> => {
+export const createPost = async (data: PostPayload): Promise<Post> => {
   console.log(data);
   const res = await api.post<Post>("/posts", data);
   console.log(res.data);
@@ -23,7 +17,7 @@ export const createPost = async (data: {
 // מעדכן פוסט קיים
 export const updatePost = async (
   id: string,
-  data: Partial<Pick<Post, "postName" | "text" |"likes"  | "userId" | "media">>
+  data: Partial<Pick<Post, "postName" | "text" | "likes" | "userId" | "media">>,
 ): Promise<Post> => {
   const res = await api.put<Post>(`/posts/${id}`, data);
   return res.data;

@@ -1,27 +1,27 @@
 import { FC, useState } from "react";
+import { useForm } from "react-hook-form";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { useStyles } from "./styles";
 import { createUser } from "../../api/users";
+import type { UserFormData } from "./types";
 
 export const CreateUserPage: FC = () => {
   const classes = useStyles();
-  const [username, setUsername] = useState("");
-  const [displayedName, setDisplayedName] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const { register, handleSubmit, reset } = useForm<UserFormData>();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
+  const onSubmit = async (data: UserFormData) => {
     setLoading(true);
-
+    setError(null);
     try {
-      await createUser({ username, displayedName });
-      setUsername("");
-      setDisplayedName("");
+      await createUser(data);
+      reset();
       alert("User created successfully!");
-    } catch (err: any) {
-      setError(err.message || "Error creating user");
+    } catch (err: unknown) {
+      const message =
+        (err as { message?: string })?.message || "Error creating user";
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -32,20 +32,16 @@ export const CreateUserPage: FC = () => {
       <Navbar />
       <div className={classes.container}>
         <h1 className={classes.title}>Create User</h1>
-        <form className={classes.form} onSubmit={handleSubmit}>
+        <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
           <input
+            {...register("username", { required: true })}
             className={classes.input}
             placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
           />
           <input
+            {...register("displayedName", { required: true })}
             className={classes.input}
             placeholder="Displayed Name"
-            value={displayedName}
-            onChange={(e) => setDisplayedName(e.target.value)}
-            required
           />
           <button className={classes.button} type="submit" disabled={loading}>
             {loading ? "Creating..." : "Create User"}
