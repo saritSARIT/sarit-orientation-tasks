@@ -3,6 +3,7 @@ import { Navbar } from "../../components/Navbar/Navbar";
 import { getPosts, deletePost } from "../../api/posts";
 import { useStyles } from "./styles";
 import type { Post } from "../../types/post";
+import { useMutation } from "@tanstack/react-query";
 
 export const DeletePostPage: FC = () => {
   const classes = useStyles();
@@ -10,25 +11,30 @@ export const DeletePostPage: FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const data = await getPosts();
-        setPosts(data);
-      } catch (err: any) {
-        setError(err.message || "Error fetching posts");
-      }
-    };
     fetchPosts();
   }, []);
 
-  const handleDelete = async (id: string) => {
-    try {
-      await deletePost(id);
+  const { mutate: fetchPosts } = useMutation({
+    mutationKey: ["fetchPosts"],
+    mutationFn: getPosts,
+    onMutate: () => setError(null),
+    onSuccess: (data: Post[]) => setPosts(data),
+    onError: (error: any) => {
+      setError(error.response?.data?.message || "Error fetching posts");
+    },
+  });
+
+  const { mutate } = useMutation({
+    mutationKey: ["deletePost"],
+    mutationFn: deletePost,
+    onSuccess: (_, id: string) => {
       setPosts(posts.filter((post) => post._id !== id));
-    } catch (err: any) {
-      setError(err.message || "Error deleting post");
-    }
-  };
+    },
+    onMutate: () => setError(null),
+    onError: (error: any) => {
+      setError(error.message || "Error deleting post");
+    },
+  });
 
   return (
     <>
@@ -42,7 +48,7 @@ export const DeletePostPage: FC = () => {
               <h3>{post.postName}</h3>
               <button
                 className={classes.button}
-                onClick={() => handleDelete(post._id)}
+                onClick={() => mutate(post._id)}
               >
                 Delete
               </button>

@@ -1,21 +1,18 @@
 import { type FC, useState } from "react";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { createPost } from "../../api/posts";
-import PostForm from "../../components/PostForm";
 import { useStyles } from "./styles";
 import { useMutation } from "@tanstack/react-query";
 import { PostPayload } from "../../types/post";
+import { FormProvider } from "react-hook-form";
+import PostForm from "../../components/PostForm";
+import { usePostForm } from "../../hooks/usePostForm";
 
 export const CreatePostPage: FC = () => {
   const classes = useStyles();
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const create = async (data: PostPayload): Promise<void> => {
-    setLoading(true);
-    setError(null);
-    mutate(data);
-  };
+  const form = usePostForm();
 
   const { mutate } = useMutation({
     mutationKey: ["createPost"],
@@ -24,26 +21,21 @@ export const CreatePostPage: FC = () => {
         ...data,
         media: data.media || undefined,
       }),
+    onMutate: () => setError(null),
     onSuccess: () => alert("Post created successfully!"),
     onError: (error: any) => {
       setError(error.response?.data?.message || "Error creating post");
     },
-    onMutate: () => setLoading(false),
   });
 
   return (
-    <>
+    <FormProvider {...form}>
       <Navbar />
       <div className={classes.container}>
         <h1 className={classes.title}>Create Post</h1>
 
-        <PostForm
-          onSubmit={create}
-          submitText="Create Post"
-          loading={loading}
-          error={error}
-        />
+        <PostForm onSubmit={mutate} submitText="Create Post" error={error} />
       </div>
-    </>
+    </FormProvider>
   );
 };

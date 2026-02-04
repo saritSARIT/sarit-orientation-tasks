@@ -4,6 +4,7 @@ import type { User } from "../../types/user";
 import { getUsers } from "../../api/users";
 import { useStyles } from "./styles";
 import Loader from "../../components/Loader";
+import { useMutation } from "@tanstack/react-query";
 
 export const UserPage: FC = () => {
   const classes = useStyles();
@@ -12,19 +13,24 @@ export const UserPage: FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const data = await getUsers();
-        setUsers(data);
-      } catch (err: any) {
-        setError(err.message || "Error fetching users");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchUsers();
   }, []);
 
+  const { mutate: fetchUsers } = useMutation({
+    mutationKey: ["fetchUsers"],
+    mutationFn: getUsers,
+    onMutate: () => {
+      setError(null);
+      setLoading(true);
+    },
+    onSuccess: (data: User[]) => {
+      setUsers(data);
+      setLoading(false);
+    },
+    onError: (error: any) => {
+      setError(error.response?.data?.message || "Error fetching posts");
+    },
+  });
   return (
     <>
       <Navbar />

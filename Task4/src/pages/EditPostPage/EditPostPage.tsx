@@ -1,57 +1,56 @@
-import { FC, useEffect, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { getPosts, updatePost } from "../../api/posts";
 import { PostForm } from "../../components/PostForm/PostForm";
 import { useStyles } from "./styles";
-import type { Post } from "../../types/post";
+import type { Post, PostPayload } from "../../types/post";
+import { FormProvider } from "react-hook-form";
+import { usePostForm } from "../../hooks/usePostForm";
+import { useMutation } from "@tanstack/react-query";
 
 export const EditPostPage: FC = () => {
   const classes = useStyles();
   const [posts, setPosts] = useState<Post[]>([]);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const data = await getPosts();
-        setPosts(data);
-      } catch (err: unknown) {
-        const message =
-          (err as { response?: { data?: { message?: string } } })?.response
-            ?.data?.message || "Error fetching posts";
-        setError(message);
-      }
-    };
     fetchPosts();
   }, []);
 
-  const handleUpdate = async (data: Partial<Post>) => {
-    if (!selectedPost) return;
+  const { mutate: fetchPosts } = useMutation({
+    mutationKey: ["fetchPosts"],
+    mutationFn: getPosts,
+    onMutate: () => setError(null),
+    onSuccess: (data: Post[]) => setPosts(data),
+    onError: (error: any) => {
+      setError(error.response?.data?.message || "Error fetching posts");
+    },
+  });
 
-    setLoading(true);
-    setError(null);
-    try {
-      await updatePost(selectedPost._id, data);
-      alert("הפוסט עודכן בהצלחה!");
+  const form = usePostForm();
 
-      setPosts((prev) =>
-        prev.map((p) => (p._id === selectedPost._id ? { ...p, ...data } : p)),
-      );
-      setSelectedPost(null); // סיום מצב עריכה
-    } catch (err: unknown) {
-      const message =
-        (err as { response?: { data?: { message?: string } } })?.response?.data
-          ?.message || "Error updating post";
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
+  const setSelectedPostState = (post: Post) => {
+    setSelectedPost(post);
+    form.reset(post);
   };
 
+  const { mutate } = useMutation({
+    mutationKey: ["updatePost"],
+    mutationFn: async (data: PostPayload) =>
+      await updatePost(selectedPost?._id as string, {
+        ...data,
+        media: data.media || undefined,
+      }),
+    onMutate: () => setError(null),
+    onSuccess: () => alert("Post updated successfully!"),
+    onError: (error: any) => {
+      setError(error.response?.data?.message || "Error updating post");
+    },
+  });
+
   return (
-    <>
+    <FormProvider {...form}>
       <Navbar />
       <div className={classes.container}>
         <h1 className={classes.title}>Edit Post</h1>
@@ -64,7 +63,7 @@ export const EditPostPage: FC = () => {
               <h3>{post.postName}</h3>
               <button
                 className={classes.button}
-                onClick={() => setSelectedPost(post)}
+                onClick={() => setSelectedPostState(post)}
               >
                 Edit
               </button>
@@ -75,13 +74,12 @@ export const EditPostPage: FC = () => {
         {selectedPost && (
           <PostForm
             initialValues={selectedPost}
-            onSubmit={handleUpdate}
+            onSubmit={mutate}
             submitText="Update Post"
-            loading={loading}
             error={error}
           />
         )}
       </div>
-    </>
+    </FormProvider>
   );
 };

@@ -4,6 +4,7 @@ import type { Post } from "../../types/post";
 import { getPosts } from "../../api/posts";
 import { useStyles } from "./styles";
 import Loader from "../../components/Loader";
+import { useMutation } from "@tanstack/react-query";
 
 export const PostsPage: FC = () => {
   const classes = useStyles();
@@ -11,16 +12,21 @@ export const PostsPage: FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchPosts = async () => {
-    try {
-      const data = await getPosts();
+  const { mutate: fetchPosts } = useMutation({
+    mutationKey: ["fetchPosts"],
+    mutationFn: getPosts,
+    onMutate: () => {
+      setError(null);
+      setLoading(true);
+    },
+    onSuccess: (data: Post[]) => {
       setPosts(data);
-    } catch (err: any) {
-      setError(err.message || "Error fetching posts");
-    } finally {
       setLoading(false);
-    }
-  };
+    },
+    onError: (error: any) => {
+      setError(error.response?.data?.message || "Error fetching posts");
+    },
+  });
 
   useEffect(() => {
     fetchPosts();

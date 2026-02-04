@@ -3,3 +3,5 @@ export type User ={
   username: string;
   displayedName: string;
 }
+
+export type UserPayload = Omit<User, "_id" >;

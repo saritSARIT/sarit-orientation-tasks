@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useForm } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import type { Post, PostPayload } from "../../types/post";
 import { useStyles } from "./styles";
 import type { PostFormProps } from "./types";
@@ -8,20 +8,11 @@ export const PostForm: FC<PostFormProps> = ({
   initialValues,
   onSubmit,
   submitText,
-  loading,
   error,
 }) => {
   const classes = useStyles();
 
-  const { register, handleSubmit } = useForm<PostPayload>({
-    defaultValues: initialValues || {
-      postName: "",
-      text: "",
-      likes: 0,
-      userId: "",
-      media: "",
-    },
-  });
+  const { register, handleSubmit } = useFormContext<PostPayload>();
 
   const onFormSubmit = async (data: PostPayload) => {
     if (initialValues) {
@@ -90,8 +81,8 @@ export const PostForm: FC<PostFormProps> = ({
         placeholder="Media URL (optional)"
       />
 
-      <button className={classes.button} type="submit" disabled={loading}>
-        {loading ? "Saving..." : submitText}
+      <button className={classes.button} type="submit">
+        {submitText}
       </button>
 
       {error && <p className={classes.error}>{error}</p>}
