@@ -5,7 +5,7 @@ import { getUsers } from "../../api/users";
 import { useStyles } from "./styles";
 import Loader from "../../components/Loader";
 import { useMutation } from "@tanstack/react-query";
-import { isNil } from "lodash/fp";
+import { isNil } from "lodash";
 
 export const UserPage: FC = () => {
   const classes = useStyles();
