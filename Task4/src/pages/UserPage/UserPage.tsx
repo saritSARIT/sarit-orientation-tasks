@@ -1,26 +1,23 @@
-import { FC, useEffect, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import { Navbar } from "../../components/Navbar/Navbar";
 import type { User } from "../../types/user";
 import { getUsers } from "../../api/users";
 import { useStyles } from "./styles";
 import Loader from "../../components/Loader";
 import { useMutation } from "@tanstack/react-query";
+import { isNil } from "lodash/fp";
 
 export const UserPage: FC = () => {
   const classes = useStyles();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const { mutate: fetchUsers } = useMutation({
     mutationKey: ["fetchUsers"],
     mutationFn: getUsers,
     onMutate: () => {
-      setError(null);
+      setErrorMessage(null);
       setLoading(true);
     },
     onSuccess: (data: User[]) => {
@@ -28,9 +25,13 @@ export const UserPage: FC = () => {
       setLoading(false);
     },
     onError: (error: any) => {
-      setError(error.response?.data?.message || "Error fetching posts");
+      setErrorMessage(error?.response?.data?.message ?? "Error fetching posts");
     },
   });
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
   return (
     <>
       <Navbar />
@@ -39,7 +40,7 @@ export const UserPage: FC = () => {
         {loading ? (
           <Loader />
         ) : (
-          !error && (
+          isNil(errorMessage) && (
             <div className={classes.list}>
               {users.map((user) => (
                 <div key={user._id} className={classes.card}>
