@@ -4,6 +4,7 @@ import type { FC } from "react";
 
 export const Loader: FC = () => {
   const classes = useStyles();
+
   return (
     <div className={classes.loaderContainer}>
       <AnimatePresence>

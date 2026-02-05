@@ -7,10 +7,11 @@ import cors from "cors";
 
 const app = express();
 const port = process.env.PORT;
+const {baseURL} = process.env;
 
 databaseConnect();
 
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(cors({ origin:baseURL}));
 
 app.use(express.json());
 
