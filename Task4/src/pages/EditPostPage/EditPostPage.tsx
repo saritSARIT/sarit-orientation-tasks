@@ -1,11 +1,11 @@
 import { type FC, useEffect, useState } from "react";
 import { Navbar } from "../../components/Navbar/Navbar";
-import { getPosts, updatePost } from "../../api/posts";
-import { PostForm } from "../../components/PostForm/PostForm";
+import { getPosts, updatePost } from "@api/posts";
+import { PostForm } from "@components/PostForm/PostForm";
 import { useStyles } from "./styles";
 import type { Post, PostPayload } from "../../types/post";
 import { FormProvider } from "react-hook-form";
-import { usePostForm } from "../../hooks/usePostForm";
+import { usePostForm } from "@hooks/usePostForm";
 import { useMutation } from "@tanstack/react-query";
 
 export const EditPostPage: FC = () => {
@@ -28,7 +28,14 @@ export const EditPostPage: FC = () => {
     },
   });
 
-  const form = usePostForm();
+  const form = usePostForm({
+    postName: "",
+    text: "",
+    likes: 0,
+    userId: "",
+    media: "",
+  });
+
 
   const setSelectedPostState = (post: Post) => {
     setSelectedPost(post);

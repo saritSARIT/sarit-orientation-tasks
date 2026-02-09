@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
-import { Navbar } from "../../components/Navbar/Navbar";
-import { getPosts, deletePost } from "../../api/posts";
+import { Navbar } from "@components/Navbar/Navbar";
+import { getPosts, deletePost } from "@api/posts";
 import { useStyles } from "./styles";
 import type { Post } from "../../types/post";
 import { useMutation } from "@tanstack/react-query";

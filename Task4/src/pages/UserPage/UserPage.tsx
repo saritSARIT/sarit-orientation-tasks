@@ -1,9 +1,9 @@
 import { type FC, useEffect, useState } from "react";
-import { Navbar } from "../../components/Navbar/Navbar";
+import { Navbar } from "@components/Navbar/Navbar";
 import type { User } from "../../types/user";
-import { getUsers } from "../../api/users";
+import { getUsers } from "@api/users";
 import { useStyles } from "./styles";
-import Loader from "../../components/Loader";
+import Loader from "@components/Loader";
 import { useMutation } from "@tanstack/react-query";
 import { isNil } from "lodash";
 

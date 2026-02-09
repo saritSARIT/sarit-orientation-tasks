@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Navbar } from "../../components/Navbar/Navbar";
+import { Navbar } from "@components/Navbar/Navbar";
 import { useStyles } from "./styles";
-import { createUser } from "../../api/users";
+import { createUser } from "@api/users";
 import { UserPayload } from "../../types/user";
 import { useMutation } from "@tanstack/react-query";
 

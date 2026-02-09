@@ -1,18 +1,24 @@
 import { type FC, useState } from "react";
-import { Navbar } from "../../components/Navbar/Navbar";
-import { createPost } from "../../api/posts";
+import { Navbar } from "@components/Navbar/Navbar";
+import { createPost } from "@api/posts";
 import { useStyles } from "./styles";
 import { useMutation } from "@tanstack/react-query";
-import { PostPayload } from "../../types/post";
+import type { PostPayload } from "../../types/post";
 import { FormProvider } from "react-hook-form";
-import PostForm from "../../components/PostForm";
-import { usePostForm } from "../../hooks/usePostForm";
+import PostForm from "@components/PostForm";
+import { usePostForm } from "@hooks/usePostForm";
 
 export const CreatePostPage: FC = () => {
   const classes = useStyles();
   const [error, setError] = useState<string | null>(null);
 
-  const form = usePostForm();
+  const form = usePostForm({
+    postName: "",
+    text: "",
+    likes: 0,
+    userId: "",
+    media: "",
+  });
 
   const { mutate } = useMutation({
     mutationKey: ["createPost"],

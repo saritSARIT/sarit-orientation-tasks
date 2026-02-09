@@ -1,10 +1,12 @@
-import axios, { AxiosInstance } from "axios";
+import axios from "axios";
 
-const { baseURL } = process.env;
+const { VITE_BASE_URL } = import.meta.env;
 
-export const api: AxiosInstance = axios.create({
-  baseURL,
+export const api = axios.create({
+  baseURL: VITE_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
+
+

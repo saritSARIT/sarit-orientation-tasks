@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Navbar } from "../../components/Navbar/Navbar";
+import { Navbar } from "@components/Navbar/Navbar";
 import { useStyles } from "./styles";
 
 export const HomePage: FC = () => {

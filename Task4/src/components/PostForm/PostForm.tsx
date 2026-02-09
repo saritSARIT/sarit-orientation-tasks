@@ -14,39 +14,35 @@ export const PostForm: FC<PostFormProps> = ({
 
   const { register, handleSubmit } = useFormContext<PostPayload>();
 
-  const onFormSubmit = async (data: PostPayload) => {
-    if (initialValues) {
-      const updatedData: Partial<PostPayload> = {};
+  const onFormSubmit = async (data: PostPayload) =>
+    initialValues
+      ? (async () => {
+          const updatedData: Partial<PostPayload> = {};
 
-      if (
-        data.postName !== undefined &&
-        data.postName !== initialValues.postName
-      ) {
-        updatedData.postName = data.postName;
-      }
-      if (data.text !== undefined && data.text !== initialValues.text) {
-        updatedData.text = data.text;
-      }
-      if (data.likes !== undefined && data.likes !== initialValues.likes) {
-        updatedData.likes = data.likes;
-      }
-      if (data.userId !== undefined && data.userId !== initialValues.userId) {
-        updatedData.userId = data.userId;
-      }
-      if ((data.media ?? "") !== (initialValues.media ?? "")) {
-        updatedData.media = data.media;
-      }
+          data.postName !== undefined &&
+            data.postName !== initialValues.postName &&
+            (updatedData.postName = data.postName);
 
-      if (Object.keys(updatedData).length === 0) {
-        alert("לא בוצעו שינויים");
-        return;
-      }
+          data.text !== undefined &&
+            data.text !== initialValues.text &&
+            (updatedData.text = data.text);
 
-      await onSubmit(updatedData as PostPayload);
-    } else {
-      await onSubmit(data as Post);
-    }
-  };
+          data.likes !== undefined &&
+            data.likes !== initialValues.likes &&
+            (updatedData.likes = data.likes);
+
+          data.userId !== undefined &&
+            data.userId !== initialValues.userId &&
+            (updatedData.userId = data.userId);
+
+          (data.media ?? "") !== (initialValues.media ?? "") &&
+            (updatedData.media = data.media);
+
+          return Object.keys(updatedData).length === 0
+            ? alert("לא בוצעו שינויים")
+            : onSubmit(updatedData as PostPayload);
+        })()
+      : onSubmit(data as Post);
 
   return (
     <form className={classes.form} onSubmit={handleSubmit(onFormSubmit)}>

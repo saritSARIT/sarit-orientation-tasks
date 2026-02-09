@@ -7,33 +7,26 @@ import DeletePostPage from "./pages/DeletePostPage";
 import PostsPage from "./pages/PostsPage";
 import HomePage from "./pages/HomePage";
 import {
-  QueryCache,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+import {ROUTES} from "@components/Navbar/consts";
 
 function App() {
-  const queryClient = new QueryClient({
-    queryCache: new QueryCache({}),
-    defaultOptions: {
-      queries: {
-        refetchOnMount: false,
-        refetchOnWindowFocus: false,
-      },
-    },
-  });
+  
+  const queryClient = new QueryClient()
 
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/Users" element={<UserPage />} />
-          <Route path="/users/create" element={<CreateUserPage />} />
-          <Route path="/posts" element={<PostsPage />} />
-          <Route path="/posts/create" element={<CreatePostPage />} />
-          <Route path="/posts/edit/:id" element={<EditPostPage />} />
-          <Route path="/posts/delete/:id" element={<DeletePostPage />} />
+          <Route path={ROUTES.HOME} element={<HomePage />} />
+          <Route path={ROUTES.USERS} element={<UserPage />} />
+          <Route path={ROUTES.CREATE_USER} element={<CreateUserPage />} />
+          <Route path={ROUTES.POSTS} element={<PostsPage />} />
+          <Route path={ROUTES.CREATE_POST} element={<CreatePostPage />} />
+          <Route path={ROUTES.EDIT_POST} element={<EditPostPage />} />
+          <Route path={ROUTES.DELETE_POST} element={<DeletePostPage />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
