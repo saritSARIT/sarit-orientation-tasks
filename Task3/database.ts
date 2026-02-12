@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const databaseUri = process.env.databaseURI ?? "";
+const databaseUri = process.env.DATA_BASE_URI ?? "";
 
 const throwError = (message: string): void => {
   throw new Error(message);
