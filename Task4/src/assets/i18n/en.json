@@ -1,0 +1,24 @@
+{
+  "ROUTES": {
+    "HOME_PAGE": "HomePage",
+    "USER_PAGE": "UserPage",
+    "CREATE_USER_PAGE": "CreateUserPage",
+    "CREATE_POST_PAGE": "CreatePostPage",
+    "EDIT_POST_PAGE": "EditPostPage",
+    "DELETE_POST_PAGE": "DeletePostPage",
+    "POST_PAGE": "PostsPage"
+  },
+
+  "TITELS": {
+    "HOME_PAGE": "Hello you are welcome to choose the required category.",
+    "USER_PAGE": "User Page",
+    "CREATE_USER": "Create User",
+    "CREATE_POST": "Create Post",
+    "EDIT_POST": "Edit Post",
+    "DELETE_POST": "Delete Post",
+    "POST_PAGE": "Posts Page",
+    "CREATED_AT":"Created At:",
+    "LIKES":"Likes:",
+    "USER":"User:"
+  }
+}

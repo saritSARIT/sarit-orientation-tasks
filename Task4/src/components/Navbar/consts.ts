@@ -1,9 +1,15 @@
 export const ROUTES = {
   HOME: "/",
-  USERS: "/users",
-  CREATE_USER: "/users/create",
-  POSTS: "/posts",
-  CREATE_POST: "/posts/create",
-  EDIT_POST: "/posts/edit/:id",
-  DELETE_POST: "/posts/delete/:id",
+
+  USERS: {
+    ROOT: "users",
+    CREATE: "create",
+  },
+
+  POSTS: {
+    ROOT: "posts",
+    CREATE: "create",
+    EDIT: "edit/:id",
+    DELETE: "delete/:id",
+  },
 };

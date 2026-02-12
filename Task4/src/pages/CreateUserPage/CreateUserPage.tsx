@@ -1,10 +1,11 @@
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Navbar } from "@components/Navbar/Navbar";
 import { useStyles } from "./styles";
 import { createUser } from "@api/users";
 import { UserPayload } from "../../types/user";
 import { useMutation } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 export const CreateUserPage: FC = () => {
   const classes = useStyles();
@@ -14,25 +15,21 @@ export const CreateUserPage: FC = () => {
     reset,
     formState: { isValid },
   } = useForm<UserPayload>();
-  const [error, setError] = useState<string | null>(null);
 
-  const { mutate } = useMutation({
+  const { mutate ,error } = useMutation({
     mutationKey: ["createUser"],
     mutationFn: handleSubmit(
       async (data: UserPayload) => await createUser(data),
     ),
-    onMutate: () => setError(null),
-    onSuccess: () => isValid && (alert("User created successfully!"), reset()),
-    onError: (error: any) => {
-      setError(error.response?.data?.message || "Error creating user");
-    },
+    onSuccess: () => isValid && (toast.success("User created successfully!"), reset()),
   });
+
+  const { t } = useTranslation("translation", { keyPrefix: "TITELS" });
 
   return (
     <>
-      <Navbar />
       <div className={classes.container}>
-        <h1 className={classes.title}>Create User</h1>
+        <h1 className={classes.title}>{t("CREATE_USER")}</h1>
         <form className={classes.form} onSubmit={mutate}>
           <input
             {...register("username", { required: true })}
@@ -44,10 +41,10 @@ export const CreateUserPage: FC = () => {
             className={classes.input}
             placeholder="Displayed Name"
           />
-          <button className={classes.button} type="submit">
+          <button className={classes.button} type="submit" >
             Create User
           </button>
-          {error && <p className={classes.error}>{error}</p>}
+          {error && <p className={classes.error}>{error?.message}</p>}
         </form>
       </div>
     </>

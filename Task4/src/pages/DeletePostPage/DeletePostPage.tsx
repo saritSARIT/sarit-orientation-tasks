@@ -1,47 +1,43 @@
-import { FC, useEffect, useState } from "react";
-import { Navbar } from "@components/Navbar/Navbar";
+import { FC } from "react";
 import { getPosts, deletePost } from "@api/posts";
 import { useStyles } from "./styles";
 import type { Post } from "../../types/post";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 export const DeletePostPage: FC = () => {
   const classes = useStyles();
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation("translation", { keyPrefix: "TITELS" });
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  const { mutate: fetchPosts } = useMutation({
-    mutationKey: ["fetchPosts"],
-    mutationFn: getPosts,
-    onMutate: () => setError(null),
-    onSuccess: (data: Post[]) => setPosts(data),
-    onError: (error: any) => {
-      setError(error.response?.data?.message || "Error fetching posts");
-    },
+  const {
+    data: posts = [],
+    error,
+    isLoading,
+  } = useQuery<Post[], Error>({
+    queryKey: ["posts"],
+    queryFn: getPosts,
   });
 
   const { mutate } = useMutation({
     mutationKey: ["deletePost"],
     mutationFn: deletePost,
-    onSuccess: (_, id: string) => {
-      setPosts(posts.filter((post) => post._id !== id));
-    },
-    onMutate: () => setError(null),
-    onError: (error: any) => {
-      setError(error.message || "Error deleting post");
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });
 
   return (
     <>
-      <Navbar />
       <div className={classes.container}>
-        <h1 className={classes.title}>Delete Posts</h1>
-        {error !== null && error !== " " && <p>Error: {error}</p>}
+        <h1 className={classes.title}>{t("POST_PAGE")}</h1>
+
+        {isLoading && <p>Loading...</p>}
+
+        {error instanceof Error && (
+          <p>{error.message}</p>
+        )}
+
         <div className={classes.list}>
           {posts.map((post) => (
             <div key={post._id} className={classes.card}>

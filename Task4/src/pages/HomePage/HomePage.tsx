@@ -1,15 +1,15 @@
 import { FC } from "react";
-import { Navbar } from "@components/Navbar/Navbar";
 import { useStyles } from "./styles";
+import { useTranslation } from "react-i18next";
 
 export const HomePage: FC = () => {
   const classes = useStyles();
+
+  const { t } = useTranslation("translation", { keyPrefix: "TITELS" });
+
   return (
     <>
-      <Navbar />
-      <h1 className={classes.title}>
-        Hello you are welcome to choose the required category.
-      </h1>
+      <h1 className={classes.title}>{t("HOME_PAGE")} </h1>
     </>
   );
 };

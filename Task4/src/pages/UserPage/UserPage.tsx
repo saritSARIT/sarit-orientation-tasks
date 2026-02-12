@@ -1,55 +1,42 @@
-import { type FC, useEffect, useState } from "react";
-import { Navbar } from "@components/Navbar/Navbar";
+import { type FC } from "react";
 import type { User } from "../../types/user";
 import { getUsers } from "@api/users";
 import { useStyles } from "./styles";
 import Loader from "@components/Loader";
-import { useMutation } from "@tanstack/react-query";
-import { isNil } from "lodash";
+import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 export const UserPage: FC = () => {
   const classes = useStyles();
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { t } = useTranslation("translation", { keyPrefix: "TITELS" });
 
-  const { mutate: fetchUsers } = useMutation({
-    mutationKey: ["fetchUsers"],
-    mutationFn: getUsers,
-    onMutate: () => {
-      setErrorMessage(null);
-      setLoading(true);
-    },
-    onSuccess: (data: User[]) => {
-      setUsers(data);
-      setLoading(false);
-    },
-    onError: (error: any) => {
-      setErrorMessage(error?.response?.data?.message ?? "Error fetching posts");
-    },
+  const {
+    data: users = [],
+    isLoading,
+    error,
+  } = useQuery<User[], Error>({
+    queryKey: ["users"],
+    queryFn: getUsers,
   });
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
   return (
     <>
-      <Navbar />
       <div className={classes.container}>
-        <h1 className={classes.title}>User Page</h1>
-        {loading ? (
+        <h1 className={classes.title}>{t("USER_PAGE")}</h1>
+
+        {isLoading ? (
           <Loader />
+        ) : error instanceof Error ? (
+          <p>{error.message}</p>
         ) : (
-          isNil(errorMessage) && (
-            <div className={classes.list}>
-              {users.map((user) => (
-                <div key={user._id} className={classes.card}>
-                  <h3 className={classes.username}>{user.username}</h3>
-                  <p className={classes.displayedName}>{user.displayedName}</p>
-                </div>
-              ))}
-            </div>
-          )
+          <div className={classes.list}>
+            {users.map((user) => (
+              <div key={user._id} className={classes.card}>
+                <h3 className={classes.username}>{user.username}</h3>
+                <p className={classes.displayedName}>{user.displayedName}</p>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </>

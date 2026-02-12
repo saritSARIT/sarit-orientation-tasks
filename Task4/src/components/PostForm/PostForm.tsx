@@ -1,48 +1,20 @@
-import { FC } from "react";
+import type { FC } from "react";
 import { useFormContext } from "react-hook-form";
-import type { Post, PostPayload } from "../../types/post";
+import type { PostPayload } from "../../types/post";
 import { useStyles } from "./styles";
-import type { PostFormProps } from "./types";
+import type { PostFormProperties } from "./types";
 
-export const PostForm: FC<PostFormProps> = ({
-  initialValues,
-  onSubmit,
-  submitText,
+export const PostForm: FC<PostFormProperties> = ({
+  submit,
+  submitButtonText,
   error,
 }) => {
   const classes = useStyles();
-
   const { register, handleSubmit } = useFormContext<PostPayload>();
 
-  const onFormSubmit = async (data: PostPayload) =>
-    initialValues
-      ? (async () => {
-          const updatedData: Partial<PostPayload> = {};
-
-          data.postName !== undefined &&
-            data.postName !== initialValues.postName &&
-            (updatedData.postName = data.postName);
-
-          data.text !== undefined &&
-            data.text !== initialValues.text &&
-            (updatedData.text = data.text);
-
-          data.likes !== undefined &&
-            data.likes !== initialValues.likes &&
-            (updatedData.likes = data.likes);
-
-          data.userId !== undefined &&
-            data.userId !== initialValues.userId &&
-            (updatedData.userId = data.userId);
-
-          (data.media ?? "") !== (initialValues.media ?? "") &&
-            (updatedData.media = data.media);
-
-          return Object.keys(updatedData).length === 0
-            ? alert("לא בוצעו שינויים")
-            : onSubmit(updatedData as PostPayload);
-        })()
-      : onSubmit(data as Post);
+  const onFormSubmit = async (data: PostPayload): Promise<void> => {
+    await submit(data);
+  };
 
   return (
     <form className={classes.form} onSubmit={handleSubmit(onFormSubmit)}>
@@ -78,10 +50,10 @@ export const PostForm: FC<PostFormProps> = ({
       />
 
       <button className={classes.button} type="submit">
-        {submitText}
+        {submitButtonText}
       </button>
 
-      {error && <p className={classes.error}>{error}</p>}
+      {error ? <p className={classes.error}>{error}</p> : null}
     </form>
   );
 };

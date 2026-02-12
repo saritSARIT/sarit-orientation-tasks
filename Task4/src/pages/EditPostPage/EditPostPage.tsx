@@ -1,31 +1,28 @@
-import { type FC, useEffect, useState } from "react";
-import { Navbar } from "../../components/Navbar/Navbar";
+import { type FC, useState } from "react";
 import { getPosts, updatePost } from "@api/posts";
 import { PostForm } from "@components/PostForm/PostForm";
 import { useStyles } from "./styles";
 import type { Post, PostPayload } from "../../types/post";
 import { FormProvider } from "react-hook-form";
-import { usePostForm } from "@hooks/usePostForm";
-import { useMutation } from "@tanstack/react-query";
+import { usePostForm } from "@components/PostForm/usePostForm";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+import { pickBy } from "lodash/fp";
+import { toast } from "react-toastify";
 
 export const EditPostPage: FC = () => {
   const classes = useStyles();
-  const [posts, setPosts] = useState<Post[]>([]);
+  const { t } = useTranslation("translation", { keyPrefix: "TITELS" });
+
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  const { mutate: fetchPosts } = useMutation({
-    mutationKey: ["fetchPosts"],
-    mutationFn: getPosts,
-    onMutate: () => setError(null),
-    onSuccess: (data: Post[]) => setPosts(data),
-    onError: (error: any) => {
-      setError(error.response?.data?.message || "Error fetching posts");
-    },
+  const {
+    data: posts = [],
+    isLoading,
+    error: queryError,
+  } = useQuery({
+    queryKey: ["posts"],
+    queryFn: getPosts,
   });
 
   const form = usePostForm({
@@ -36,33 +33,44 @@ export const EditPostPage: FC = () => {
     media: "",
   });
 
-
   const setSelectedPostState = (post: Post) => {
     setSelectedPost(post);
     form.reset(post);
   };
 
-  const { mutate } = useMutation({
+  const { mutateAsync,error } = useMutation({
     mutationKey: ["updatePost"],
-    mutationFn: async (data: PostPayload) =>
-      await updatePost(selectedPost?._id as string, {
-        ...data,
-        media: data.media || undefined,
-      }),
-    onMutate: () => setError(null),
-    onSuccess: () => alert("Post updated successfully!"),
-    onError: (error: any) => {
-      setError(error.response?.data?.message || "Error updating post");
-    },
+    mutationFn: (data: Partial<PostPayload>) =>
+      updatePost(selectedPost!._id, data),
+    onSuccess: () => toast.success("Post updated successfully!"),
   });
+
+  const handleSubmit = async (data: PostPayload) => {
+    if (!selectedPost) return;
+
+    const updatedData = pickBy(
+      (value, key) =>
+        (value ?? "") !== (selectedPost[key as keyof PostPayload] ?? ""),
+      data,
+    );
+
+    if (Object.keys(updatedData).length === 0) {
+      alert("לא בוצעו שינויים");
+      return;
+    }
+
+    await mutateAsync(updatedData);
+  };
+
+  if (isLoading) return <p>Loading...</p>;
+  if (queryError) return <p>Error loading posts</p>;
 
   return (
     <FormProvider {...form}>
-      <Navbar />
       <div className={classes.container}>
-        <h1 className={classes.title}>Edit Post</h1>
+        <h1 className={classes.title}>{t("EDIT_POST")}</h1>
 
-        {error && <p className={classes.error}>{error}</p>}
+        {error && <p className={classes.error}>{error?.message}</p>}
 
         <div className={classes.list}>
           {posts.map((post) => (
@@ -80,10 +88,9 @@ export const EditPostPage: FC = () => {
 
         {selectedPost && (
           <PostForm
-            initialValues={selectedPost}
-            onSubmit={mutate}
-            submitText="Update Post"
-            error={error}
+            submit={handleSubmit}
+            submitButtonText="Update Post"
+            error={error?.message}
           />
         )}
       </div>
