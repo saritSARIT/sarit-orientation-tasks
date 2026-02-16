@@ -1,20 +1,23 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Outlet, createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ROUTES } from "@components/Navbar/consts";
-import { Layout } from "./Layout";
-import UserPage from "./pages/UserPage";
-import CreateUserPage from "./pages/CreateUserPage";
-import CreatePostPage from "./pages/CreatePostPage";
-import EditPostPage from "./pages/EditPostPage";
-import DeletePostPage from "./pages/DeletePostPage";
-import PostsPage from "./pages/PostsPage";
-import HomePage from "./pages/HomePage";
+import { Navbar } from "@components/Navbar/Navbar";
+import UserPage from "@pages/UserPage";
+import CreateUserPage from "@pages/CreateUserPage";
+import CreatePostPage from "@pages/CreatePostPage";
+import EditPostPage from "@pages/EditPostPage";
+import DeletePostPage from "@pages/DeletePostPage";
+import PostsPage from "@pages/PostsPage";
+import HomePage from "@pages/HomePage";
 
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
-    element: <Layout />,
+    element:  <>
+      <Navbar />
+      <Outlet />
+    </>,
     children: [
       {
         path: ROUTES.HOME,

@@ -9,7 +9,7 @@ export const ROUTES = {
   POSTS: {
     ROOT: "posts",
     CREATE: "create",
-    EDIT: "edit/:id",
-    DELETE: "delete/:id",
+    EDIT: "edit/",
+    DELETE: "delete/",
   },
 };

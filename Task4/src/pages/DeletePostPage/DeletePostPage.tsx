@@ -1,13 +1,14 @@
-import { FC } from "react";
+import type { FC } from "react";
 import { getPosts, deletePost } from "@api/posts";
 import { useStyles } from "./styles";
 import type { Post } from "../../types/post";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { map } from "lodash/fp";
 
 export const DeletePostPage: FC = () => {
   const classes = useStyles();
-  const { t } = useTranslation("translation", { keyPrefix: "TITELS" });
+  const { t } = useTranslation("translation", { keyPrefix: "PAGES" });
   const queryClient = useQueryClient();
 
   const {
@@ -15,43 +16,38 @@ export const DeletePostPage: FC = () => {
     error,
     isLoading,
   } = useQuery<Post[], Error>({
-    queryKey: ["posts"],
+    queryKey: ["get", "post"],
     queryFn: getPosts,
   });
 
   const { mutate } = useMutation({
-    mutationKey: ["deletePost"],
+    mutationKey: ["delete", "post"],
     mutationFn: deletePost,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    onSuccess: (_, postId: string) => {
+      queryClient.setQueryData<Post[]>(["get", "post"], (oldPosts) =>
+        oldPosts?.filter((p) => p._id !== postId),
+      );
     },
   });
 
   return (
-    <>
-      <div className={classes.container}>
-        <h1 className={classes.title}>{t("POST_PAGE")}</h1>
+    <div className={classes.container}>
+      <h1 className={classes.title}>{t("DELETE_POST.TITLE")}</h1>
 
-        {isLoading && <p>Loading...</p>}
+      {isLoading && <p>Loading...</p>}
 
-        {error instanceof Error && (
-          <p>{error.message}</p>
-        )}
+      {error instanceof Error && <p>{error.message}</p>}
 
-        <div className={classes.list}>
-          {posts.map((post) => (
-            <div key={post._id} className={classes.card}>
-              <h3>{post.postName}</h3>
-              <button
-                className={classes.button}
-                onClick={() => mutate(post._id)}
-              >
-                Delete
-              </button>
-            </div>
-          ))}
-        </div>
+      <div className={classes.list}>
+        {map((post: Post) => (
+          <div key={post._id} className={classes.card}>
+            <h3>{post.postName}</h3>
+            <button className={classes.button} onClick={() => mutate(post._id)}>
+              {t("DELETE_POST.BUTTON")}
+            </button>
+          </div>
+        ))(posts)}
       </div>
-    </>
+    </div>
   );
 };

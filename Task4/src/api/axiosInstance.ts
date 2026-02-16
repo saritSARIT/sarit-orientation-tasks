@@ -1,4 +1,5 @@
 import axios from "axios";
+import { get } from "lodash/fp";
 
 const { VITE_BASE_URL } = import.meta.env;
 
@@ -10,6 +11,8 @@ export const api = axios.create({
 });
 
 api.interceptors.response.use(
-  (response) => response.data,
+  (response) => {
+    return get("data", response);
+  },
   (error) => Promise.reject(error),
 );

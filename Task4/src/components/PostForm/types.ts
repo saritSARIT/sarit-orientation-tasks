@@ -1,7 +1,8 @@
 import type { PostPayload } from "../../types/post";
+import type { Function1 } from "lodash";
 
-export type PostFormProperties = {
-  submit: (data: PostPayload) => void | Promise<void>;
+export type PostFormProps = {
+  submit: Function1<PostPayload, void | Promise<void>>;
   submitButtonText: string;
   error?: string;
 };

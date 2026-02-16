@@ -1,24 +1,54 @@
 {
-  "ROUTES": {
-    "HOME_PAGE": "HomePage",
-    "USER_PAGE": "UserPage",
-    "CREATE_USER_PAGE": "CreateUserPage",
-    "CREATE_POST_PAGE": "CreatePostPage",
-    "EDIT_POST_PAGE": "EditPostPage",
-    "DELETE_POST_PAGE": "DeletePostPage",
-    "POST_PAGE": "PostsPage"
-  },
-
-  "TITELS": {
-    "HOME_PAGE": "Hello you are welcome to choose the required category.",
-    "USER_PAGE": "User Page",
-    "CREATE_USER": "Create User",
-    "CREATE_POST": "Create Post",
-    "EDIT_POST": "Edit Post",
-    "DELETE_POST": "Delete Post",
-    "POST_PAGE": "Posts Page",
-    "CREATED_AT":"Created At:",
-    "LIKES":"Likes:",
-    "USER":"User:"
+  "PAGES": {
+    "HOME": {
+      "ROUTE": "HomePage",
+      "TITLE": "Hello you are welcome to choose the required category."
+    },
+    "USER": {
+      "ROUTE": "UserPage",
+      "TITLE": "User Page"
+    },
+    "CREATE_USER": {
+      "ROUTE": "CreateUserPage",
+      "TITLE": "Create User",
+      "BUTTON":"Create User"
+    },
+    "CREATE_POST": {
+      "ROUTE": "CreatePostPage",
+      "TITLE": "Create Post",
+      "BUTTON":"Create Post"
+    },
+    "EDIT_POST": {
+      "ROUTE": "EditPostPage",
+      "TITLE": "Edit Post",
+      "BUTTON":"Edit"
+    },
+    "DELETE_POST": {
+      "ROUTE": "DeletePostPage",
+      "TITLE": "Delete Post",
+      "BUTTON":"Delete"
+    },
+    "POST": {
+      "ROUTE": "PostsPage",
+      "TITLE": "Posts Page",
+      "CREATED_AT": "Created At:",
+      "LIKES": "Likes:",
+      "USER": "User:"
+    },
+    "POST_FORM":{
+       "PLACEHOLDERS": {
+        "POST_NAME": "Post Name",
+        "TEXT": "Text",
+        "LIKES": "Likes",
+        "USER_ID": "User ID",
+        "MEDIA": "Media URL (optional)"
+      }
+    },
+    "USER_FORM":{
+       "PLACEHOLDERS": {
+        "USER_NAME": "User name",
+        "DISPLAYED_NAME": "Displayed Name"
+      }
+    }
   }
 }

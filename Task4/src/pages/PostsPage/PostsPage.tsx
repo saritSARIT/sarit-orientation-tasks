@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 export const PostsPage: FC = () => {
   const classes = useStyles();
-  const { t } = useTranslation("translation", { keyPrefix: "TITELS" });
+  const { t } = useTranslation("translation", { keyPrefix: "PAGES" });
 
   const {
     data: posts = [],
@@ -29,7 +29,7 @@ export const PostsPage: FC = () => {
   return (
     <>
       <div className={classes.container}>
-        <h1 className={classes.title}>{t("POST_PAGE")}</h1>
+        <h1 className={classes.title}>{t("POST.TITLE")}</h1>
 
         {isLoading ? (
           <Loader />
@@ -43,15 +43,15 @@ export const PostsPage: FC = () => {
                 <p className={classes.text}>{post.text}</p>
 
                 <p>
-                  <strong>{t("USER")}</strong> {post.userId}
+                  <strong>{t("POST.USER")}</strong> {post.userId}
                 </p>
 
                 <p>
-                  <strong>{t("LIKES")}</strong> {post.likes}
+                  <strong>{t("POST.LIKES")}</strong> {post.likes}
                 </p>
 
                 <p>
-                  <strong>{t("CREATED_AT")}</strong>{" "}
+                  <strong>{t("POST.CREATED_AT")}</strong>{" "}
                   {new Date(post.createdAt).toLocaleString()}
                 </p>
 

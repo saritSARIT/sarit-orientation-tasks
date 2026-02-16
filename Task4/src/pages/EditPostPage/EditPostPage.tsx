@@ -1,99 +1,93 @@
-import { type FC, useState } from "react";
+import type { FC } from "react";
+import { useState } from "react";
 import { getPosts, updatePost } from "@api/posts";
 import { PostForm } from "@components/PostForm/PostForm";
 import { useStyles } from "./styles";
-import type { Post, PostPayload } from "../../types/post";
-import { FormProvider } from "react-hook-form";
-import { usePostForm } from "@components/PostForm/usePostForm";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import type { PostPayload, Post } from "../../types/post";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { pickBy } from "lodash/fp";
+import { pickBy, isEmpty } from "lodash/fp";
 import { toast } from "react-toastify";
 
 export const EditPostPage: FC = () => {
   const classes = useStyles();
-  const { t } = useTranslation("translation", { keyPrefix: "TITELS" });
+  const { t } = useTranslation("translation", { keyPrefix: "PAGES" });
+  const queryClient = useQueryClient();
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-
-  const {
-    data: posts = [],
-    isLoading,
-    error: queryError,
-  } = useQuery({
-    queryKey: ["posts"],
+  const { data: posts = [], isLoading, error: queryError } = useQuery<Post[]>({
+    queryKey: ["get", "post"],
     queryFn: getPosts,
   });
 
-  const form = usePostForm({
-    postName: "",
-    text: "",
-    likes: 0,
-    userId: "",
-    media: "",
-  });
+  const selectedPost = posts.find((p) => p._id === selectedPostId) || undefined;
 
-  const setSelectedPostState = (post: Post) => {
-    setSelectedPost(post);
-    form.reset(post);
-  };
-
-  const { mutateAsync,error } = useMutation({
-    mutationKey: ["updatePost"],
+  const { mutate, error: editError } = useMutation({
+    mutationKey: ["update", "post"],
     mutationFn: (data: Partial<PostPayload>) =>
-      updatePost(selectedPost!._id, data),
-    onSuccess: () => toast.success("Post updated successfully!"),
+      updatePost(selectedPostId as string, data),
+    onSuccess: (updatedPost) => {
+      toast.success("Post updated successfully!");
+      queryClient.setQueryData<Post[]>(["get", "post"], (oldPosts) =>
+        oldPosts
+          ? oldPosts.map((p) => (p._id === updatedPost._id ? updatedPost : p))
+          : []
+      );
+    },
   });
 
   const handleSubmit = async (data: PostPayload) => {
     if (!selectedPost) return;
 
     const updatedData = pickBy(
-      (value, key) =>
-        (value ?? "") !== (selectedPost[key as keyof PostPayload] ?? ""),
-      data,
+      (value, key) => (value ?? "") !== (selectedPost[key as keyof PostPayload] ?? ""),
+      data
     );
 
-    if (Object.keys(updatedData).length === 0) {
-      alert("לא בוצעו שינויים");
+    if (isEmpty(updatedData)) {
+      toast.success("לא בוצעו שינויים");
       return;
     }
 
-    await mutateAsync(updatedData);
+    mutate(updatedData);
   };
 
-  if (isLoading) return <p>Loading...</p>;
-  if (queryError) return <p>Error loading posts</p>;
-
   return (
-    <FormProvider {...form}>
-      <div className={classes.container}>
-        <h1 className={classes.title}>{t("EDIT_POST")}</h1>
+    <div className={classes.container}>
+      <h1 className={classes.title}>{t("EDIT_POST.TITLE")}</h1>
 
-        {error && <p className={classes.error}>{error?.message}</p>}
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : queryError ? (
+        <p>Error loading posts</p>
+      ) : (
+        <>
+          {editError && <p className={classes.error}>{editError.message}</p>}
 
-        <div className={classes.list}>
-          {posts.map((post) => (
-            <div key={post._id} className={classes.card}>
-              <h3>{post.postName}</h3>
-              <button
-                className={classes.button}
-                onClick={() => setSelectedPostState(post)}
-              >
-                Edit
-              </button>
-            </div>
-          ))}
-        </div>
+          <div className={classes.list}>
+            {posts.map((post) => (
+              <div key={post._id} className={classes.card}>
+                <h3>{post.postName}</h3>
+                <button
+                  className={classes.button}
+                  onClick={() => setSelectedPostId(post._id)}
+                >
+                  {t("EDIT_POST.BUTTON")}
+                </button>
+              </div>
+            ))}
+          </div>
 
-        {selectedPost && (
-          <PostForm
-            submit={handleSubmit}
-            submitButtonText="Update Post"
-            error={error?.message}
-          />
-        )}
-      </div>
-    </FormProvider>
+          {selectedPost && (
+            <PostForm
+              submit={handleSubmit}
+              submitButtonText="Update Post"
+              error={editError?.message}
+              defaultValues={selectedPost} 
+            />
+          )}
+        </>
+      )}
+    </div>
   );
 };
