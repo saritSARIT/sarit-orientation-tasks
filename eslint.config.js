@@ -198,7 +198,7 @@ export default defineConfig([
   },
   {
     //frontend configuration
-    files: ["Task1/**"],
+    files: ["Task1/**","Task4/**"],
  
     languageOptions: { globals: globals.browser },
  
