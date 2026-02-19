@@ -6,21 +6,26 @@ import { useStyles } from "./styles";
 import type { PostPayload, Post } from "../../types/post";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { pickBy, isEmpty } from "lodash/fp";
+import { pickBy, isEmpty,map,find,matchesProperty } from "lodash/fp";
 import { toast } from "react-toastify";
+import Loader from "@components/Loader";
 
 export const EditPostPage: FC = () => {
   const classes = useStyles();
-  const { t } = useTranslation("translation", { keyPrefix: "PAGES" });
+  const { t } = useTranslation("translation", { keyPrefix: "PAGES.EDIT_POST" });
   const queryClient = useQueryClient();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
-  const { data: posts = [], isLoading, error: queryError } = useQuery<Post[]>({
+  const {
+    data: posts = [],
+    isLoading,
+    error: queryError,
+  } = useQuery<Post[]>({
     queryKey: ["get", "post"],
     queryFn: getPosts,
   });
 
-  const selectedPost = posts.find((p) => p._id === selectedPostId) || undefined;
+const selectedPost = find(matchesProperty("_id", selectedPostId))(posts);
 
   const { mutate, error: editError } = useMutation({
     mutationKey: ["update", "post"],
@@ -31,7 +36,7 @@ export const EditPostPage: FC = () => {
       queryClient.setQueryData<Post[]>(["get", "post"], (oldPosts) =>
         oldPosts
           ? oldPosts.map((p) => (p._id === updatedPost._id ? updatedPost : p))
-          : []
+          : [],
       );
     },
   });
@@ -40,8 +45,9 @@ export const EditPostPage: FC = () => {
     if (!selectedPost) return;
 
     const updatedData = pickBy(
-      (value, key) => (value ?? "") !== (selectedPost[key as keyof PostPayload] ?? ""),
-      data
+      (value, key) =>
+        (value ?? "") !== (selectedPost[key as keyof PostPayload] ?? ""),
+      data,
     );
 
     if (isEmpty(updatedData)) {
@@ -54,28 +60,31 @@ export const EditPostPage: FC = () => {
 
   return (
     <div className={classes.container}>
-      <h1 className={classes.title}>{t("EDIT_POST.TITLE")}</h1>
+      <h1 className={classes.title}>{t("TITLE")}</h1>
 
       {isLoading ? (
-        <p>Loading...</p>
+        <Loader />
       ) : queryError ? (
-        <p>Error loading posts</p>
+        <p>{t("ERROR")}</p>
       ) : (
         <>
           {editError && <p className={classes.error}>{editError.message}</p>}
 
           <div className={classes.list}>
-            {posts.map((post) => (
-              <div key={post._id} className={classes.card}>
-                <h3>{post.postName}</h3>
-                <button
-                  className={classes.button}
-                  onClick={() => setSelectedPostId(post._id)}
-                >
-                  {t("EDIT_POST.BUTTON")}
-                </button>
-              </div>
-            ))}
+            {map(
+              (post) => (
+                <div key={post._id} className={classes.card}>
+                  <h3>{post.postName}</h3>
+                  <button
+                    className={classes.button}
+                    onClick={() => setSelectedPostId(post._id)}
+                  >
+                    {t("BUTTON")}
+                  </button>
+                </div>
+              ),
+              posts,
+            )}
           </div>
 
           {selectedPost && (
@@ -83,7 +92,7 @@ export const EditPostPage: FC = () => {
               submit={handleSubmit}
               submitButtonText="Update Post"
               error={editError?.message}
-              defaultValues={selectedPost} 
+              defaultValues={selectedPost}
             />
           )}
         </>

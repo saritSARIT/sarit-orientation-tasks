@@ -5,7 +5,7 @@ import { useStyles } from "./styles";
 import Loader from "@components/Loader";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { pipe, sortBy, map } from "lodash/fp";
+import { pipe, map } from "lodash/fp";
 
 export const UserPage: FC = () => {
   const classes = useStyles();
@@ -21,7 +21,6 @@ export const UserPage: FC = () => {
   });
 
   const renderedUsers = pipe(
-    sortBy("username"),
     map((user: User) => (
       <div key={user._id} className={classes.card}>
         <h3 className={classes.username}>{user.username}</h3>

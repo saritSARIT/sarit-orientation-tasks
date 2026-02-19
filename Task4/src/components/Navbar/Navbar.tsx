@@ -36,11 +36,11 @@ export const Navbar: FC = () => {
         {t("CREATE_POST.ROUTE")}
       </Link>
 
-      <Link to={`/${ROUTES.POSTS.ROOT}/edit/`} className={classes.navLink}>
+      <Link to={`/${ROUTES.POSTS.ROOT}/${ROUTES.POSTS.EDIT}`} className={classes.navLink}>
         {t("EDIT_POST.ROUTE")}
       </Link>
 
-      <Link to={`/${ROUTES.POSTS.ROOT}/delete/`} className={classes.navLink}>
+      <Link to={`/${ROUTES.POSTS.ROOT}/${ROUTES.POSTS.DELETE}`} className={classes.navLink}>
         {t("DELETE_POST.ROUTE")}
       </Link>
     </nav>

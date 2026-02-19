@@ -4,7 +4,8 @@ import { useStyles } from "./styles";
 import type { Post } from "../../types/post";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { map } from "lodash/fp";
+import { filter, isNil, map } from "lodash/fp";
+import Loader from "@components/Loader";
 
 export const DeletePostPage: FC = () => {
   const classes = useStyles();
@@ -15,7 +16,7 @@ export const DeletePostPage: FC = () => {
     data: posts = [],
     error,
     isLoading,
-  } = useQuery<Post[], Error>({
+  } = useQuery({
     queryKey: ["get", "post"],
     queryFn: getPosts,
   });
@@ -24,8 +25,9 @@ export const DeletePostPage: FC = () => {
     mutationKey: ["delete", "post"],
     mutationFn: deletePost,
     onSuccess: (_, postId: string) => {
-      queryClient.setQueryData<Post[]>(["get", "post"], (oldPosts) =>
-        oldPosts?.filter((p) => p._id !== postId),
+      queryClient.setQueryData<Post[]>(
+        ["get", "post"],
+        filter((p) => p._id !== postId),
       );
     },
   });
@@ -34,9 +36,9 @@ export const DeletePostPage: FC = () => {
     <div className={classes.container}>
       <h1 className={classes.title}>{t("DELETE_POST.TITLE")}</h1>
 
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <Loader />}
 
-      {error instanceof Error && <p>{error.message}</p>}
+      {!isNil(error) && <p>{error.message}</p>}
 
       <div className={classes.list}>
         {map((post: Post) => (

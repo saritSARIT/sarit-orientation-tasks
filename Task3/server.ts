@@ -7,11 +7,11 @@ import cors from "cors";
 
 const app = express();
 const port = process.env.PORT;
-const {BASE_URL} = process.env;
+const { FRONTED_URL } = process.env;
 
 databaseConnect();
 
-app.use(cors({ origin:BASE_URL}));
+app.use(cors({ origin: FRONTED_URL }));
 
 app.use(express.json());
 

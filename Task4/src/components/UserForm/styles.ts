@@ -7,12 +7,6 @@ export const useStyles = createUseStyles({
     gap: 20,
     marginTop: 40,
   },
-  input: {
-    padding: 10,
-    fontSize: 15,
-    borderRadius: 6,
-    border: "1px solid #1f2933",
-  },
   button: {
     padding: 12,
     borderRadius: 6,

@@ -4,54 +4,50 @@ import type { PostPayload } from "../../types/post";
 import { useStyles } from "./styles";
 import type { PostFormProps } from "./types";
 import { useTranslation } from "react-i18next";
+import { FormInput } from "../FormInput/FormInput";
 
-export const PostForm: FC<PostFormProps & { defaultValues?: Partial<PostPayload> }> = ({
+export const PostForm: FC<PostFormProps> = ({
   submit,
   submitButtonText,
   error,
   defaultValues,
 }) => {
   const classes = useStyles();
-  const methods = useForm<PostPayload>({ defaultValues });
-  const { handleSubmit, register } = methods;
-
-  const onFormSubmit = async (data: PostPayload): Promise<void> => {
-    await submit(data);
-  };
-
-  const { t } = useTranslation("translation", { keyPrefix:"PAGES.POST_FORM" });
+  const form = useForm<PostPayload>({ defaultValues });
+  const { t } = useTranslation("translation", { keyPrefix: "POST_FORM" });
 
   return (
-    <FormProvider {...methods}>
-      <form className={classes.form} onSubmit={handleSubmit(onFormSubmit)}>
-        <input
-          {...register("postName", { required: true })}
-          className={classes.input}
+    <FormProvider {...form}>
+      <form
+        className={classes.form}
+        onSubmit={form.handleSubmit(submit)}
+      >
+        <FormInput<PostPayload>
+          name="postName"
           placeholder={t("PLACEHOLDERS.POST_NAME")}
+          requiredMessage="Required"
         />
 
-        <input
-          {...register("text", { required: true })}
-          className={classes.input}
-         placeholder={t("PLACEHOLDERS.TEXT")}
+        <FormInput<PostPayload>
+          name="text"
+          placeholder={t("PLACEHOLDERS.TEXT")}
+          requiredMessage="Required"
         />
 
-        <input
+        <FormInput<PostPayload>
+          name="likes"
           type="number"
-          {...register("likes")}
-          className={classes.input}
           placeholder={t("PLACEHOLDERS.LIKES")}
         />
 
-        <input
-          {...register("userId", { required: true })}
-          className={classes.input}
-            placeholder={t("PLACEHOLDERS.USER_ID")}
+        <FormInput<PostPayload>
+          name="userId"
+          placeholder={t("PLACEHOLDERS.USER_ID")}
+          requiredMessage="Required"
         />
 
-        <input
-          {...register("media")}
-          className={classes.input}
+        <FormInput<PostPayload>
+          name="media"
           placeholder={t("PLACEHOLDERS.MEDIA")}
         />
 
@@ -59,7 +55,11 @@ export const PostForm: FC<PostFormProps & { defaultValues?: Partial<PostPayload>
           {submitButtonText}
         </button>
 
-        {error ? <p className={classes.error}>{error}</p> : null}
+        {error && (
+          <p className={classes.error}>
+            {error}
+          </p>
+        )}
       </form>
     </FormProvider>
   );

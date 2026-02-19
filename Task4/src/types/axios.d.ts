@@ -1,4 +1,3 @@
-import "axios";
 import type { AxiosRequestConfig } from "axios";
 
 declare module "axios" {

@@ -11,8 +11,6 @@ export const api = axios.create({
 });
 
 api.interceptors.response.use(
-  (response) => {
-    return get("data", response);
-  },
-  (error) => Promise.reject(error),
+  get("data"),
+  Promise.reject
 );

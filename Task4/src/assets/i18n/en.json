@@ -11,22 +11,23 @@
     "CREATE_USER": {
       "ROUTE": "CreateUserPage",
       "TITLE": "Create User",
-      "BUTTON":"Create User"
+      "BUTTON": "Create User"
     },
     "CREATE_POST": {
       "ROUTE": "CreatePostPage",
       "TITLE": "Create Post",
-      "BUTTON":"Create Post"
+      "BUTTON": "Create Post"
     },
     "EDIT_POST": {
       "ROUTE": "EditPostPage",
       "TITLE": "Edit Post",
-      "BUTTON":"Edit"
+      "BUTTON": "Edit",
+      "ERROR":"Error loading posts"
     },
     "DELETE_POST": {
       "ROUTE": "DeletePostPage",
       "TITLE": "Delete Post",
-      "BUTTON":"Delete"
+      "BUTTON": "Delete"
     },
     "POST": {
       "ROUTE": "PostsPage",
@@ -34,21 +35,26 @@
       "CREATED_AT": "Created At:",
       "LIKES": "Likes:",
       "USER": "User:"
+    }
+  },
+
+  "POST_FORM": {
+    "PLACEHOLDERS": {
+      "POST_NAME": "Post Name",
+      "TEXT": "Text",
+      "LIKES": "Likes",
+      "USER_ID": "User ID",
+      "MEDIA": "Media URL (optional)"
+    }
+  },
+  "USER_FORM": {
+    "PLACEHOLDERS": {
+      "USER_NAME": "User name",
+      "DISPLAYED_NAME": "Displayed Name"
     },
-    "POST_FORM":{
-       "PLACEHOLDERS": {
-        "POST_NAME": "Post Name",
-        "TEXT": "Text",
-        "LIKES": "Likes",
-        "USER_ID": "User ID",
-        "MEDIA": "Media URL (optional)"
-      }
-    },
-    "USER_FORM":{
-       "PLACEHOLDERS": {
-        "USER_NAME": "User name",
-        "DISPLAYED_NAME": "Displayed Name"
-      }
+    "REQUIREDS": {
+      "USER_NAME": "Username is required",
+      "DISPLAYED_NAME": "Displayed Name is required"
     }
   }
 }

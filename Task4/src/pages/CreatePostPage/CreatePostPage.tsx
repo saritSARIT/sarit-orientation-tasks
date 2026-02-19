@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 export const CreatePostPage: FC = () => {
   const classes = useStyles();
-  const { t } = useTranslation("translation", { keyPrefix:"PAGES" });
+  const { t } = useTranslation("translation", { keyPrefix:"PAGES.CREATE_POST" });
   const queryClient = useQueryClient();
 
   const { mutate, error } = useMutation({
@@ -29,11 +29,11 @@ export const CreatePostPage: FC = () => {
 
   return (
     <div className={classes.container}>
-      <h1 className={classes.title}>{t("CREATE_POST.TITLE")}</h1>
+      <h1 className={classes.title}>{t("TITLE")}</h1>
 
       <PostForm
         submit={mutate}
-        submitButtonText={t("CREATE_POST.BUTTON")}
+        submitButtonText={t("BUTTON")}
         error={error?.message}
       />
     </div>
