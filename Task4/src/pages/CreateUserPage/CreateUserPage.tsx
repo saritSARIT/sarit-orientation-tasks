@@ -7,19 +7,22 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { UserForm } from "@components/UserForm/UserForm";
+import { queryKeys } from "@api/queryKeys";
 
 export const CreateUserPage: FC = () => {
   const classes = useStyles();
   const form = useForm<UserPayload>();
-  const { t } = useTranslation("translation", { keyPrefix: "PAGES" });
+  const { t } = useTranslation("translation", {
+    keyPrefix: "PAGES.CREATE_USER",
+  });
   const queryClient = useQueryClient();
 
   const { mutateAsync, error } = useMutation({
-    mutationKey: ["create", "user"],
+    mutationKey: queryKeys.users.create,
     mutationFn: createUser,
     onSuccess: (newUser) => {
       queryClient.setQueryData(
-        ["get", "user"],
+        queryKeys.users.all,
         (oldUsers: UserPayload[] = []) => [...oldUsers, newUser],
       );
     },
@@ -28,16 +31,16 @@ export const CreateUserPage: FC = () => {
   return (
     <FormProvider {...form}>
       <div className={classes.container}>
-        <h1 className={classes.title}>{t("CREATE_USER.TITLE")}</h1>
+        <h1 className={classes.title}>{t("TITLE")}</h1>
 
         <form
           onSubmit={form.handleSubmit(async (data) => {
             await mutateAsync(data);
-            toast.success("User created successfully!");
+            toast.success(t("TOAST_SUCCESS"));
             form.reset();
           })}
         >
-          <UserForm submitButtonText={t("CREATE_USER.BUTTON")} />
+          <UserForm submitButtonText={t("BUTTON")} />
         </form>
 
         {error && <p className={classes.error}>{error.message}</p>}

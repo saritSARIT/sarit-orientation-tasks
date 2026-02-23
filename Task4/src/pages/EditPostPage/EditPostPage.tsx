@@ -6,9 +6,10 @@ import { useStyles } from "./styles";
 import type { PostPayload, Post } from "../../types/post";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { pickBy, isEmpty,map,find,matchesProperty } from "lodash/fp";
+import { pickBy, isEmpty, map, find, matchesProperty } from "lodash/fp";
 import { toast } from "react-toastify";
 import Loader from "@components/Loader";
+import { queryKeys } from "@api/queryKeys";
 
 export const EditPostPage: FC = () => {
   const classes = useStyles();
@@ -21,42 +22,37 @@ export const EditPostPage: FC = () => {
     isLoading,
     error: queryError,
   } = useQuery<Post[]>({
-    queryKey: ["get", "post"],
+    queryKey: queryKeys.posts.all,
     queryFn: getPosts,
   });
 
-const selectedPost = find(matchesProperty("_id", selectedPostId))(posts);
+  const selectedPost = find(matchesProperty("_id", selectedPostId))(posts);
 
   const { mutate, error: editError } = useMutation({
-    mutationKey: ["update", "post"],
+    mutationKey: queryKeys.posts.update,
     mutationFn: (data: Partial<PostPayload>) =>
-      updatePost(selectedPostId as string, data),
+      updatePost(selectedPostId!, data),
     onSuccess: (updatedPost) => {
-      toast.success("Post updated successfully!");
-      queryClient.setQueryData<Post[]>(["get", "post"], (oldPosts) =>
-        oldPosts
-          ? oldPosts.map((p) => (p._id === updatedPost._id ? updatedPost : p))
-          : [],
+      toast.success(t("TOAST_SUCCESS1"));
+      queryClient.setQueryData<Post[]>(
+        queryKeys.posts.all,
+        map((p) => (p._id === updatedPost._id ? updatedPost : p)),
       );
     },
   });
 
-  const handleSubmit = async (data: PostPayload) => {
-    if (!selectedPost) return;
-
-    const updatedData = pickBy(
-      (value, key) =>
-        (value ?? "") !== (selectedPost[key as keyof PostPayload] ?? ""),
-      data,
-    );
-
-    if (isEmpty(updatedData)) {
-      toast.success("לא בוצעו שינויים");
-      return;
-    }
-
-    mutate(updatedData);
-  };
+  const handleSubmit = (data: PostPayload) =>
+    selectedPost &&
+    (() => {
+      const updatedData = pickBy(
+        (value, key) =>
+          (value ?? "") !== (selectedPost[key as keyof PostPayload] ?? ""),
+        data,
+      );
+      return isEmpty(updatedData)
+        ? toast.success(t("TOAST_SUCCESS2"))
+        : mutate(updatedData);
+    })();
 
   return (
     <div className={classes.container}>
@@ -90,7 +86,7 @@ const selectedPost = find(matchesProperty("_id", selectedPostId))(posts);
           {selectedPost && (
             <PostForm
               submit={handleSubmit}
-              submitButtonText="Update Post"
+              submitButtonText={t("SUBMIT_BUTTON_TEXT")}
               error={editError?.message}
               defaultValues={selectedPost}
             />

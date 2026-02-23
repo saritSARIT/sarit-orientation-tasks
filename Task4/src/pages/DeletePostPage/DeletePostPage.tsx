@@ -6,10 +6,13 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { filter, isNil, map } from "lodash/fp";
 import Loader from "@components/Loader";
+import { queryKeys } from "@api/queryKeys";
 
 export const DeletePostPage: FC = () => {
   const classes = useStyles();
-  const { t } = useTranslation("translation", { keyPrefix: "PAGES" });
+  const { t } = useTranslation("translation", {
+    keyPrefix: "PAGES.DELETE_POST",
+  });
   const queryClient = useQueryClient();
 
   const {
@@ -17,24 +20,25 @@ export const DeletePostPage: FC = () => {
     error,
     isLoading,
   } = useQuery({
-    queryKey: ["get", "post"],
+    queryKey: queryKeys.posts.all,
     queryFn: getPosts,
   });
 
   const { mutate } = useMutation({
-    mutationKey: ["delete", "post"],
+    mutationKey: queryKeys.posts.delete,
     mutationFn: deletePost,
-    onSuccess: (_, postId: string) => {
+    onSuccess: (deletedPost) => {
+      if (!deletedPost) return;
       queryClient.setQueryData<Post[]>(
-        ["get", "post"],
-        filter((p) => p._id !== postId),
+        queryKeys.posts.all,
+        filter((p) => p._id !== deletedPost._id),
       );
     },
   });
 
   return (
     <div className={classes.container}>
-      <h1 className={classes.title}>{t("DELETE_POST.TITLE")}</h1>
+      <h1 className={classes.title}>{t("TITLE")}</h1>
 
       {isLoading && <Loader />}
 
@@ -45,7 +49,7 @@ export const DeletePostPage: FC = () => {
           <div key={post._id} className={classes.card}>
             <h3>{post.postName}</h3>
             <button className={classes.button} onClick={() => mutate(post._id)}>
-              {t("DELETE_POST.BUTTON")}
+              {t("BUTTON")}
             </button>
           </div>
         ))(posts)}

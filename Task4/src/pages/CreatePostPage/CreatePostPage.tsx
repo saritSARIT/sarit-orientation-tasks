@@ -6,23 +6,28 @@ import type { PostPayload } from "../../types/post";
 import { PostForm } from "@components/PostForm/PostForm";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import { concat } from "lodash/fp";
+import { queryKeys } from "@api/queryKeys";
 
 export const CreatePostPage: FC = () => {
   const classes = useStyles();
-  const { t } = useTranslation("translation", { keyPrefix:"PAGES.CREATE_POST" });
+  const { t } = useTranslation("translation", {
+    keyPrefix: "PAGES.CREATE_POST",
+  });
   const queryClient = useQueryClient();
 
   const { mutate, error } = useMutation({
-    mutationKey: ["create", "post"],
+    mutationKey: queryKeys.posts.create,
     mutationFn: async (data: PostPayload) =>
       await createPost({
         ...data,
-        media: data.media || undefined,
+        media: data.media ,
       }),
     onSuccess: (newPost) => {
-      toast.success("Post created successfully!");
-      queryClient.setQueryData<PostPayload[]>(["get", "post"], (oldPosts) =>
-        oldPosts ? [...oldPosts, newPost] : [newPost]
+      toast.success(t("TOAST_SUCCESS"));
+      queryClient.setQueryData<PostPayload[]>(
+        queryKeys.posts.all,
+        (oldPosts = []) => concat(oldPosts, newPost),
       );
     },
   });

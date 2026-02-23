@@ -6,6 +6,7 @@ import Loader from "@components/Loader";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { pipe, map } from "lodash/fp";
+import { queryKeys } from "@api/queryKeys";
 
 export const UserPage: FC = () => {
   const classes = useStyles();
@@ -16,7 +17,7 @@ export const UserPage: FC = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["users"],
+    queryKey: queryKeys.users.all,
     queryFn: getUsers,
   });
 
@@ -28,7 +29,7 @@ export const UserPage: FC = () => {
       </div>
     )),
   )(users);
-
+  ``;
   return (
     <div className={classes.container}>
       <h1 className={classes.title}>{t("USER.TITLE")}</h1>

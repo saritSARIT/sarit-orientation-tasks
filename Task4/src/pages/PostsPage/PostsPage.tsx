@@ -5,6 +5,7 @@ import { useStyles } from "./styles";
 import Loader from "@components/Loader";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { queryKeys } from "@api/queryKeys";
 
 export const PostsPage: FC = () => {
   const classes = useStyles();
@@ -15,7 +16,7 @@ export const PostsPage: FC = () => {
     isLoading,
     error,
   } = useQuery<Post[], Error>({
-    queryKey: ["posts"],
+    queryKey: queryKeys.posts.all,
     queryFn: getPosts,
   });
 
