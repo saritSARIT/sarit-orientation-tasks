@@ -43,7 +43,7 @@ export const CreateUserPage: FC = () => {
           <UserForm submitButtonText={t("BUTTON")} />
         </form>
 
-        {error && <p className={classes.error}>{error.message}</p>}
+        {error ? <p className={classes.error}>{error.message}</p> : null}
       </div>
     </FormProvider>
   );

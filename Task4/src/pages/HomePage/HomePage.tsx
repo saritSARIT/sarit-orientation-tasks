@@ -7,5 +7,5 @@ export const HomePage: FC = () => {
 
   const { t } = useTranslation("translation", { keyPrefix: "PAGES" });
 
-  return <h1 className={classes.title}>{t("HOME.TITLE")} </h1>;
+  return <h1 className={classes.title}>{t("HOME.TITLE")}</h1>;
 };

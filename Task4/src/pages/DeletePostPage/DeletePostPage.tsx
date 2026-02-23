@@ -40,7 +40,7 @@ export const DeletePostPage: FC = () => {
     <div className={classes.container}>
       <h1 className={classes.title}>{t("TITLE")}</h1>
 
-      {isLoading && <Loader />}
+      {isLoading ? <Loader /> : null}
 
       {!isNil(error) && <p>{error.message}</p>}
 
@@ -48,7 +48,11 @@ export const DeletePostPage: FC = () => {
         {map((post: Post) => (
           <div key={post._id} className={classes.card}>
             <h3>{post.postName}</h3>
-            <button className={classes.button} onClick={() => mutate(post._id)}>
+            <button
+              type="button"
+              className={classes.button}
+              onClick={() => { mutate(post._id); }}
+            >
               {t("BUTTON")}
             </button>
           </div>

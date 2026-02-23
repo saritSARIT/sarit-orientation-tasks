@@ -24,7 +24,7 @@
       "ROUTE": "EditPostPage",
       "TITLE": "Edit Post",
       "BUTTON": "Edit",
-      "ERROR":"Error loading posts",
+      "ERROR": "Error loading posts",
       "TOAST_SUCCESS1": "Post updated successfully!",
       "TOAST_SUCCESS2": "No changes were made to the post.",
       "SUBMIT_BUTTON_TEXT": "Update Post"
