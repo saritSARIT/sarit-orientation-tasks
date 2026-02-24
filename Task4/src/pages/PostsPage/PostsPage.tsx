@@ -6,10 +6,11 @@ import Loader from "@components/Loader";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { queryKeys } from "@api/queryKeys";
+import { isNil } from "lodash/fp";
 
 export const PostsPage: FC = () => {
   const classes = useStyles();
-  const { t } = useTranslation("translation", { keyPrefix: "PAGES" });
+  const { t } = useTranslation("translation", { keyPrefix: "PAGES.POST" });
 
   const {
     data: posts = [],
@@ -30,11 +31,11 @@ export const PostsPage: FC = () => {
   return (
     <>
       <div className={classes.container}>
-        <h1 className={classes.title}>{t("POST.TITLE")}</h1>
+        <h1 className={classes.title}>{t("TITLE")}</h1>        
 
         {isLoading ? (
           <Loader />
-        ) : error instanceof Error ? (
+        ) : !isNil(error) ? (
           <p>{error.message}</p>
         ) : (
           <div className={classes.list}>
@@ -44,15 +45,15 @@ export const PostsPage: FC = () => {
                 <p className={classes.text}>{post.text}</p>
 
                 <p>
-                  <strong>{t("POST.USER")}</strong> {post.userId}
+                  <strong>{t("USER")}</strong> {post.userId}
                 </p>
 
                 <p>
-                  <strong>{t("POST.LIKES")}</strong> {post.likes}
+                  <strong>{t("LIKES")}</strong> {post.likes}
                 </p>
 
                 <p>
-                  <strong>{t("POST.CREATED_AT")}</strong>{" "}
+                  <strong>{t("CREATED_AT")}</strong>{" "}
                   {new Date(post.createdAt).toLocaleString()}
                 </p>
 

@@ -17,7 +17,7 @@ export const CreateUserPage: FC = () => {
   });
   const queryClient = useQueryClient();
 
-  const { mutateAsync, error } = useMutation({
+  const { mutate, error } = useMutation({
     mutationKey: queryKeys.users.create,
     mutationFn: createUser,
     onSuccess: (newUser) => {
@@ -25,6 +25,8 @@ export const CreateUserPage: FC = () => {
         queryKeys.users.all,
         (oldUsers: UserPayload[] = []) => [...oldUsers, newUser],
       );
+      toast.success(t("TOAST_SUCCESS"));
+      form.reset();
     },
   });
 
@@ -35,9 +37,7 @@ export const CreateUserPage: FC = () => {
 
         <form
           onSubmit={form.handleSubmit(async (data) => {
-            await mutateAsync(data);
-            toast.success(t("TOAST_SUCCESS"));
-            form.reset();
+            await mutate(data);
           })}
         >
           <UserForm submitButtonText={t("BUTTON")} />

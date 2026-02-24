@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useStyles } from "./styles";
 import type { FC } from "react";
-import { ROUTES } from "./consts";
+import { ROUTES } from "../Router/consts";
 import { useTranslation } from "react-i18next";
 
 export const Navbar: FC = () => {

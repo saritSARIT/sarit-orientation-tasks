@@ -1,28 +1,27 @@
 import type { AxiosRequestConfig } from "axios";
 
 declare module "axios" {
- 
   interface AxiosInstance {
-    get<TResponse = unknown>(
+    get: <TResponse = unknown>(
       url: string,
       config?: AxiosRequestConfig,
-    ): Promise<TResponse>;
+    ) => Promise<TResponse>;
 
-    delete<TResponse = unknown>(
+    delete: <TResponse = unknown>(
       url: string,
       config?: AxiosRequestConfig,
-    ): Promise<TResponse>;
+    ) => Promise<TResponse>;
 
-    post<TResponse = unknown, TRequest = unknown>(
+    post: <TResponse = unknown>(
       url: string,
-      data?: TRequest,
+      data?: unknown,
       config?: AxiosRequestConfig,
-    ): Promise<TResponse>;
+    ) => Promise<TResponse>;
 
-    put<TResponse = unknown, TRequest = unknown>(
+    put: <TResponse = unknown>(
       url: string,
-      data?: TRequest,
+      data?: unknown,
       config?: AxiosRequestConfig,
-    ): Promise<TResponse>;
+    ) => Promise<TResponse>;
   }
 }

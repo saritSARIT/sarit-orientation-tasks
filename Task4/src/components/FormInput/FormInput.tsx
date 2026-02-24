@@ -1,20 +1,20 @@
-import { useFormContext, type FieldValues } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { useStyles } from "./styles";
 import type { FormInputProps } from "./types";
 
-export const FormInput = <T extends FieldValues>({
+export const FormInput = ({
   name,
   placeholder,
   type = "text",
   requiredMessage,
-}: FormInputProps<T>) => {
+}: FormInputProps) => {
   const classes = useStyles();
   const {
     register,
     formState: { errors },
-  } = useFormContext<T>();
+  } = useFormContext();
 
-  const error = errors[name];
+  const error = errors[name as keyof typeof errors];
 
   return (
     <>
@@ -27,7 +27,7 @@ export const FormInput = <T extends FieldValues>({
         className={classes.input}
       />
 
-      {error && <p className={classes.error}>{error.message as string}</p>}
+      {error && <p className={classes.error}>{error?.message as string}</p>}
     </>
   );
 };

@@ -41,18 +41,20 @@ export const EditPostPage: FC = () => {
     },
   });
 
-  const handleSubmit = (data: PostPayload) =>
-    selectedPost &&
-    (() => {
-      const updatedData = pickBy(
-        (value, key) =>
-          (value ?? "") !== (selectedPost[key as keyof PostPayload] ?? ""),
-        data,
-      );
-      return isEmpty(updatedData)
-        ? toast.success(t("TOAST_SUCCESS2"))
-        : mutate(updatedData);
-    })();
+  const handleSubmit = (data: PostPayload) => {
+    const updatedData = pickBy(
+      (value, key) =>
+        (value ?? "") !== (selectedPost![key as keyof PostPayload] ?? ""),
+      data,
+    );
+
+    if (isEmpty(updatedData)) {
+      toast.success(t("TOAST_SUCCESS2"));
+      return;
+    }
+
+    mutate(updatedData);
+  };
 
   return (
     <div className={classes.container}>

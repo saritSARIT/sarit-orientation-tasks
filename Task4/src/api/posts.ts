@@ -11,5 +11,5 @@ export const updatePost = async (
   data: Partial<Pick<Post, "postName" | "text" | "likes" | "userId" | "media">>,
 ): Promise<Post> => await api.put(`/posts/${id}`, data);
 
-export const deletePost = async (id: string): Promise<Post | null> =>
+export const deletePost = async (id: string): Promise<Post> =>
   await api.delete(`/posts/${id}`);

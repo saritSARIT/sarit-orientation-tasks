@@ -21,7 +21,6 @@ export const CreatePostPage: FC = () => {
     mutationFn: async (data: PostPayload) =>
       await createPost({
         ...data,
-        media: data.media ,
       }),
     onSuccess: (newPost) => {
       toast.success(t("TOAST_SUCCESS"));

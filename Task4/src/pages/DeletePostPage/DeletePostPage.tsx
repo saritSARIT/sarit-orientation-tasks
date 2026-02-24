@@ -28,10 +28,9 @@ export const DeletePostPage: FC = () => {
     mutationKey: queryKeys.posts.delete,
     mutationFn: deletePost,
     onSuccess: (deletedPost) => {
-      if (!deletedPost) return;
       queryClient.setQueryData<Post[]>(
         queryKeys.posts.all,
-        filter((p) => p._id !== deletedPost._id),
+        filter((post) => post._id !== deletedPost._id),
       );
     },
   });
@@ -51,7 +50,9 @@ export const DeletePostPage: FC = () => {
             <button
               type="button"
               className={classes.button}
-              onClick={() => { mutate(post._id); }}
+              onClick={() => {
+                mutate(post._id);
+              }}
             >
               {t("BUTTON")}
             </button>

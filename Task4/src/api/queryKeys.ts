@@ -1,12 +1,12 @@
 export const queryKeys = {
   posts: {
-    all: ["get", "post"] as const,
-    create: ["create", "post"] as const,
-    update: ["update", "post"] as const,
-    delete: ["delete", "post"] as const,
+    all: ["get", "post"],
+    create: ["create", "post"],
+    update: ["update", "post"],
+    delete: ["delete", "post"],
   },
   users: {
-    all: ["get", "user"] as const,
-    create: ["create", "user"] as const,
+    all: ["get", "user"],
+    create: ["create", "user"],
   },
 };
