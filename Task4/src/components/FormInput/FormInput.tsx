@@ -1,20 +1,22 @@
 import { useFormContext } from "react-hook-form";
 import { useStyles } from "./styles";
 import type { FormInputProps } from "./types";
+import type { FC } from "react";
+import { isNil } from "lodash/fp";
 
-export const FormInput = ({
+export const FormInput: FC<FormInputProps> = ({
   name,
   placeholder,
   type = "text",
   requiredMessage,
-}: FormInputProps) => {
+}) => {
   const classes = useStyles();
   const {
     register,
     formState: { errors },
   } = useFormContext();
 
-  const error = errors[name as keyof typeof errors];
+  const error = errors[name];
 
   return (
     <>
@@ -27,7 +29,11 @@ export const FormInput = ({
         className={classes.input}
       />
 
-      {error && <p className={classes.error}>{error?.message as string}</p>}
+      {/* Useform's types */}
+      {/* eslint-disable @typescript-eslint/no-unsafe-type-assertion */}
+      {isNil(error) ? null : (
+        <p className={classes.error}>{error.message as string}</p>
+      )}
     </>
   );
 };

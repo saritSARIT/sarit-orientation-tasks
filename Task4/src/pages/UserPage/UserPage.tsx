@@ -31,14 +31,9 @@ export const UserPage: FC = () => {
   return (
     <div className={classes.container}>
       <h1 className={classes.title}>{t("TITLE")}</h1>
-
-      {isLoading ? (
-        <Loader />
-      ) : !isNil(error) ? (
-        <p>{error.message}</p>
-      ) : (
-        <div className={classes.list}>{renderedUsers}</div>
-      )}
+      {isNil(isLoading) && <Loader />}
+      {!isNil(error) && <p>{error.message}</p>}
+      <div className={classes.list}>{renderedUsers}</div>
     </div>
   );
 };

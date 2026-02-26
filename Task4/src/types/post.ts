@@ -1,4 +1,6 @@
 export type Post = {
+  //I had to use that name.
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   _id: string;
   postName: string;
   userId: string;

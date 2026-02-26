@@ -36,8 +36,10 @@ export const CreateUserPage: FC = () => {
         <h1 className={classes.title}>{t("TITLE")}</h1>
 
         <form
-          onSubmit={form.handleSubmit(async (data) => {
-            await mutate(data);
+          // Returns promise void
+          // eslint-disable-next-line @typescript-eslint/strict-void-return
+          onSubmit={form.handleSubmit((data) => {
+            mutate(data);
           })}
         >
           <UserForm submitButtonText={t("BUTTON")} />

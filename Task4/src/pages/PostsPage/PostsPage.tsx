@@ -1,5 +1,4 @@
-import { FC } from "react";
-import type { Post } from "../../types/post";
+import type { FC } from "react";
 import { getPosts } from "@api/posts";
 import { useStyles } from "./styles";
 import Loader from "@components/Loader";
@@ -7,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { queryKeys } from "@api/queryKeys";
 import { isNil } from "lodash/fp";
+import { getYouTubeId, isYouTubeMedia } from "./functions";
 
 export const PostsPage: FC = () => {
   const classes = useStyles();
@@ -16,78 +16,70 @@ export const PostsPage: FC = () => {
     data: posts = [],
     isLoading,
     error,
-  } = useQuery<Post[], Error>({
+  } = useQuery({
     queryKey: queryKeys.posts.all,
     queryFn: getPosts,
   });
 
-  const getYouTubeId = (url: string): string => {
-    const regExp =
-      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    const match = url.match(regExp);
-    return match && match[2].length === 11 ? match[2] : "";
-  };
-
   return (
-    <>
-      <div className={classes.container}>
-        <h1 className={classes.title}>{t("TITLE")}</h1>        
+    <div className={classes.container}>
+      <h1 className={classes.title}>{t("TITLE")}</h1>
 
-        {isLoading ? (
-          <Loader />
-        ) : !isNil(error) ? (
-          <p>{error.message}</p>
-        ) : (
-          <div className={classes.list}>
-            {posts.map((post) => (
-              <div key={post._id} className={classes.card}>
-                <h3 className={classes.postName}>{post.postName}</h3>
-                <p className={classes.text}>{post.text}</p>
+      {isNil(isLoading) && <Loader />}
+      {!isNil(error) && <p>{error.message}</p>}
 
-                <p>
-                  <strong>{t("USER")}</strong> {post.userId}
-                </p>
+      <div className={classes.list}>
+        {posts.map((post) => (
+          <div key={post._id} className={classes.card}>
+            <h3 className={classes.postName}>{post.postName}</h3>
+            <p className={classes.text}>{post.text}</p>
 
-                <p>
-                  <strong>{t("LIKES")}</strong> {post.likes}
-                </p>
+            <p>
+              <strong>{t("USER", { userId: post.userId })}</strong>
+              {post.userId}
+            </p>
 
-                <p>
-                  <strong>{t("CREATED_AT")}</strong>{" "}
-                  {new Date(post.createdAt).toLocaleString()}
-                </p>
+            <p>
+              <strong>{t("LIKES")}</strong>
+              {post.likes}
+            </p>
 
-                {post.media &&
-                  (post.media.includes("youtube.com") ||
-                  post.media.includes("youtu.be") ? (
-                    <iframe
-                      width="100%"
-                      height="315"
-                      src={`https://www.youtube.com/embed/${getYouTubeId(
-                        post.media,
-                      )}`}
-                      title="YouTube video"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      style={{ marginTop: "10px", borderRadius: "8px" }}
-                    />
-                  ) : (
-                    <video
-                      src={post.media}
-                      controls
-                      style={{
-                        maxWidth: "100%",
-                        marginTop: "10px",
-                        borderRadius: "8px",
-                      }}
-                    />
-                  ))}
-              </div>
-            ))}
+            <p>
+              <strong>{t("CREATED_AT")}</strong>
+              {new Date(post.createdAt).toLocaleString()}
+            </p>
+
+            {isYouTubeMedia(post) ? (
+              <iframe
+                allowFullScreen
+                sandbox=""
+                width="100%"
+                height="315"
+                title="YouTube video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                style={{
+                  marginTop: "10px",
+                  borderRadius: "8px",
+                  border: "none",
+                }}
+                src={`https://www.youtube.com/embed/${getYouTubeId(
+                  post.media,
+                )}`}
+              />
+            ) : (
+              <video
+                controls
+                src={post.media}
+                style={{
+                  maxWidth: "100%",
+                  marginTop: "10px",
+                  borderRadius: "8px",
+                }}
+              />
+            )}
           </div>
-        )}
+        ))}
       </div>
-    </>
+    </div>
   );
 };

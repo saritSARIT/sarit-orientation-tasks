@@ -39,7 +39,7 @@
       "TITLE": "Posts Page",
       "CREATED_AT": "Created At:",
       "LIKES": "Likes:",
-      "USER": "User:"
+      "USER": "User: {{userId}}"
     }
   },
 

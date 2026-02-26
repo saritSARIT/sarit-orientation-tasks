@@ -5,6 +5,7 @@ import { useStyles } from "./styles";
 import type { PostFormProps } from "./types";
 import { useTranslation } from "react-i18next";
 import { FormInput } from "../FormInput/FormInput";
+import { isNil } from "lodash/fp";
 
 export const PostForm: FC<PostFormProps> = ({
   submit,
@@ -20,46 +21,41 @@ export const PostForm: FC<PostFormProps> = ({
     <FormProvider {...form}>
       <form
         className={classes.form}
+        // Returns promise void
+        // eslint-disable-next-line @typescript-eslint/strict-void-return
         onSubmit={form.handleSubmit(submit)}
       >
-        <FormInput<PostPayload>
+        <FormInput
           name="postName"
           placeholder={t("PLACEHOLDERS.POST_NAME")}
           requiredMessage="Required"
         />
 
-        <FormInput<PostPayload>
+        <FormInput
           name="text"
           placeholder={t("PLACEHOLDERS.TEXT")}
           requiredMessage="Required"
         />
 
-        <FormInput<PostPayload>
+        <FormInput
           name="likes"
           type="number"
           placeholder={t("PLACEHOLDERS.LIKES")}
         />
 
-        <FormInput<PostPayload>
+        <FormInput
           name="userId"
           placeholder={t("PLACEHOLDERS.USER_ID")}
           requiredMessage="Required"
         />
 
-        <FormInput<PostPayload>
-          name="media"
-          placeholder={t("PLACEHOLDERS.MEDIA")}
-        />
+        <FormInput name="media" placeholder={t("PLACEHOLDERS.MEDIA")} />
 
         <button className={classes.button} type="submit">
           {submitButtonText}
         </button>
 
-        {error && (
-          <p className={classes.error}>
-            {error}
-          </p>
-        )}
+        {isNil(error) ? null : <p className={classes.error}>{error}</p>}
       </form>
     </FormProvider>
   );

@@ -1,3 +1,3 @@
-import {DeletePostPage} from './DeletePostPage';
+import { DeletePostPage } from "./DeletePostPage";
 
 export default DeletePostPage;
