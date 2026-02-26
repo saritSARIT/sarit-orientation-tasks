@@ -50,9 +50,10 @@ export const PostsPage: FC = () => {
             </p>
 
             {isYouTubeMedia(post) ? (
+              //Requires use of JavaScript
+              // eslint-disable-next-line react/iframe-missing-sandbox
               <iframe
                 allowFullScreen
-                sandbox=""
                 width="100%"
                 height="315"
                 title="YouTube video"
