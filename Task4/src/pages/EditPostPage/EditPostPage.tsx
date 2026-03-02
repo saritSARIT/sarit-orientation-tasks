@@ -16,7 +16,7 @@ export const EditPostPage: FC = () => {
     setSelectedPostId,
     submit,
     queryError,
-    editError,
+    editPostError,
   } = useEditPostPage();
 
   return (
@@ -26,8 +26,8 @@ export const EditPostPage: FC = () => {
       {isNil(isLoading) && <Loader />}
       {isNil(queryError) ? null : <p>{t("ERROR")}</p>}
 
-      {isNil(editError) ? null : (
-        <p className={classes.error}>{editError.message}</p>
+      {isNil(editPostError) ? null : (
+        <p className={classes.error}>{editPostError.message}</p>
       )}
 
       <div className={classes.list}>
@@ -54,7 +54,7 @@ export const EditPostPage: FC = () => {
         <PostForm
           submit={submit}
           submitButtonText={t("SUBMIT_BUTTON_TEXT")}
-          error={editError?.message}
+          error={editPostError?.message}
           defaultValues={selectedPost}
         />
       ) : null}

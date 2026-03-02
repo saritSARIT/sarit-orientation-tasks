@@ -44,20 +44,21 @@ export const DeletePostPage: FC = () => {
       {!isNil(error) && <p>{error.message}</p>}
 
       <div className={classes.list}>
-        {map((post: Post) => (
-          <div key={post._id} className={classes.card}>
-            <h3>{post.postName}</h3>
-            <button
-              type="button"
-              className={classes.button}
-              onClick={() => {
-                deletePostMutate(post._id);
-              }}
-            >
-              {t("BUTTON")}
-            </button>
-          </div>
-        ))(posts)}
+        {map(
+          (post) => (
+            <div key={post._id} className={classes.card}>
+              <h3>{post.postName}</h3>
+              <button
+                type="button"
+                className={classes.button}
+                onClick={() => deletePostMutate(post._id)}
+              >
+                {t("BUTTON")}
+              </button>
+            </div>
+          ),
+          posts,
+        )}
       </div>
     </div>
   );

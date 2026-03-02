@@ -25,7 +25,7 @@ export const useEditPostPage = () => {
     data: posts = [],
     isLoading,
     error: queryError,
-  } = useQuery<Post[]>({
+  } = useQuery({
     queryKey: queryKeys.posts.all,
     queryFn: getPosts,
   });
