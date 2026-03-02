@@ -6,3 +6,4 @@ export const createUserSchema = Joi.object({
     displayedName: Joi.string().required(),
   }).required(),
 });
+

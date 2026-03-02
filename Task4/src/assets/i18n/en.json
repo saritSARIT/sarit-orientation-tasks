@@ -1,0 +1,65 @@
+{
+  "PAGES": {
+    "HOME": {
+      "ROUTE": "HomePage",
+      "TITLE": "Hello you are welcome to choose the required category."
+    },
+    "USER": {
+      "ROUTE": "UserPage",
+      "TITLE": "User Page"
+    },
+    "CREATE_USER": {
+      "ROUTE": "CreateUserPage",
+      "TITLE": "Create User",
+      "BUTTON": "Create User",
+      "TOAST_SUCCESS": "User created successfully!"
+    },
+    "CREATE_POST": {
+      "ROUTE": "CreatePostPage",
+      "TITLE": "Create Post",
+      "BUTTON": "Create Post",
+      "TOAST_SUCCESS": "Post created successfully!"
+    },
+    "EDIT_POST": {
+      "ROUTE": "EditPostPage",
+      "TITLE": "Edit Post",
+      "BUTTON": "Edit",
+      "ERROR": "Error loading posts",
+      "TOAST_SUCCESS1": "Post updated successfully!",
+      "TOAST_SUCCESS2": "No changes were made to the post.",
+      "SUBMIT_BUTTON_TEXT": "Update Post"
+    },
+    "DELETE_POST": {
+      "ROUTE": "DeletePostPage",
+      "TITLE": "Delete Post",
+      "BUTTON": "Delete"
+    },
+    "POST": {
+      "ROUTE": "PostsPage",
+      "TITLE": "Posts Page",
+      "CREATED_AT": "Created At:",
+      "LIKES": "Likes:",
+      "USER": "User: "
+    }
+  },
+
+  "POST_FORM": {
+    "PLACEHOLDERS": {
+      "POST_NAME": "Post Name",
+      "TEXT": "Text",
+      "LIKES": "Likes",
+      "USER_ID": "User ID",
+      "MEDIA": "Media URL (optional)"
+    }
+  },
+  "USER_FORM": {
+    "PLACEHOLDERS": {
+      "USER_NAME": "User name",
+      "DISPLAYED_NAME": "Displayed Name"
+    },
+    "REQUIREDS": {
+      "USER_NAME": "Username is required",
+      "DISPLAYED_NAME": "Displayed Name is required"
+    }
+  }
+}

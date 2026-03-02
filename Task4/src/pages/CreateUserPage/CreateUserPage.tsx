@@ -1,0 +1,55 @@
+import type { FC } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { useStyles } from "./styles";
+import { createUser } from "@api/users";
+import type { UserPayload } from "../../types/user";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
+import { UserForm } from "@components/UserForm/UserForm";
+import { queryKeys } from "@api/queryKeys";
+import { concat } from "lodash/fp";
+
+export const CreateUserPage: FC = () => {
+  const classes = useStyles();
+  const form = useForm<UserPayload>();
+  const { t } = useTranslation("translation", {
+    keyPrefix: "PAGES.CREATE_USER",
+  });
+  const queryClient = useQueryClient();
+
+  const { mutate: createUserMutate, error: createUserError } = useMutation({
+    mutationKey: queryKeys.users.create,
+    mutationFn: createUser,
+    onSuccess: (newUser) => {
+      queryClient.setQueryData<UserPayload[]>(
+        queryKeys.users.all,
+        (oldUsers: UserPayload[] = []) => concat(oldUsers, newUser),
+      );
+      toast.success(t("TOAST_SUCCESS"));
+      form.reset();
+    },
+  });
+
+  return (
+    <FormProvider {...form}>
+      <div className={classes.container}>
+        <h1 className={classes.title}>{t("TITLE")}</h1>
+
+        <form
+          // Returns promise void
+          // eslint-disable-next-line @typescript-eslint/strict-void-return
+          onSubmit={form.handleSubmit((data) => {
+            createUserMutate(data);
+          })}
+        >
+          <UserForm submitButtonText={t("BUTTON")} />
+        </form>
+
+        {createUserError ? (
+          <p className={classes.error}>{createUserError.message}</p>
+        ) : null}
+      </div>
+    </FormProvider>
+  );
+};

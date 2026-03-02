@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes";
 export const validateRequest =
   (schema: ObjectSchema) =>
   (req: Request, res: Response, next: NextFunction): void => {
-    const { error } = schema.validate(req, { abortEarly: false });
+    const { error } = schema.unknown(true).validate(req, { abortEarly: false });
     if (error) {
       res.status(StatusCodes.BAD_REQUEST).json({
         message: error.details[0].message,
