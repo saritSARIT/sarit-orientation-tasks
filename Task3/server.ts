@@ -3,11 +3,15 @@ import userRoutes from "./user/user.routes";
 import postRoutes from "./post/post.routes";
 import { errorHandler } from "./middlewares/errorHandler";
 import { databaseConnect } from "./database";
+import cors from "cors";
 
 const app = express();
 const port = process.env.PORT;
+const { FRONTED_URL } = process.env;
 
 databaseConnect();
+
+app.use(cors({ origin: FRONTED_URL }));
 
 app.use(express.json());
 
