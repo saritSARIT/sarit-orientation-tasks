@@ -22,10 +22,10 @@ export const UserPage: FC = () => {
   });
 
   const renderedUsers = map((user: User) => (
-    <div key={user._id} className={classes.card}>
+    <li key={user._id} className={classes.card}>
       <h3 className={classes.username}>{user.username}</h3>
       <p className={classes.displayedName}>{user.displayedName}</p>
-    </div>
+    </li>
   ))(users);
 
   return (
@@ -33,7 +33,7 @@ export const UserPage: FC = () => {
       <h1 className={classes.title}>{t("TITLE")}</h1>
       {isNil(isLoading) && <Loader />}
       {!isNil(error) && <p>{error.message}</p>}
-      <div className={classes.list}>{renderedUsers}</div>
+      <ul className={classes.list}>{renderedUsers}</ul>
     </div>
   );
 };

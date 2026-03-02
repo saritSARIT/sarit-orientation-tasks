@@ -8,7 +8,7 @@ export const createPost = async (data: PostPayload): Promise<Post> =>
 
 export const updatePost = async (
   id: string,
-  data: Partial<Pick<Post, "postName" | "text" | "likes" | "userId" | "media">>,
+  data: Partial<Omit<Post, "_id" | "createdAt">>,
 ): Promise<Post> => await api.put(`/posts/${id}`, data);
 
 export const deletePost = async (id: string): Promise<Post> =>

@@ -7,7 +7,7 @@ export type Post = {
   text: string;
   media?: string;
   likes: number;
-  createdAt: Date;
+  createdAt: string;
 };
 
 export type PostPayload = Omit<Post, "_id" | "createdAt">;

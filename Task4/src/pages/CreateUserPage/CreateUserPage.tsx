@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { UserForm } from "@components/UserForm/UserForm";
 import { queryKeys } from "@api/queryKeys";
+import { concat } from "lodash/fp";
 
 export const CreateUserPage: FC = () => {
   const classes = useStyles();
@@ -17,13 +18,13 @@ export const CreateUserPage: FC = () => {
   });
   const queryClient = useQueryClient();
 
-  const { mutate, error } = useMutation({
+  const { mutate: createUserMutate, error: createUserError } = useMutation({
     mutationKey: queryKeys.users.create,
     mutationFn: createUser,
     onSuccess: (newUser) => {
-      queryClient.setQueryData(
+      queryClient.setQueryData<UserPayload[]>(
         queryKeys.users.all,
-        (oldUsers: UserPayload[] = []) => [...oldUsers, newUser],
+        (oldUsers: UserPayload[] = []) => concat(oldUsers, newUser),
       );
       toast.success(t("TOAST_SUCCESS"));
       form.reset();
@@ -39,13 +40,15 @@ export const CreateUserPage: FC = () => {
           // Returns promise void
           // eslint-disable-next-line @typescript-eslint/strict-void-return
           onSubmit={form.handleSubmit((data) => {
-            mutate(data);
+            createUserMutate(data);
           })}
         >
           <UserForm submitButtonText={t("BUTTON")} />
         </form>
 
-        {error ? <p className={classes.error}>{error.message}</p> : null}
+        {createUserError ? (
+          <p className={classes.error}>{createUserError.message}</p>
+        ) : null}
       </div>
     </FormProvider>
   );

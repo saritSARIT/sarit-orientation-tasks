@@ -11,6 +11,7 @@ export const useStyles = createUseStyles({
     marginBottom: 40,
   },
   list: {
+    listStyle: "none",
     display: "flex",
     justifyContent: "center",
     gap: 20,
@@ -31,5 +32,15 @@ export const useStyles = createUseStyles({
   text: {
     margin: "0 5 0 0 0",
     color: "#facc15",
+  },
+  iframe: {
+    marginTop: "10px",
+    borderRadius: "8px",
+    border: "none",
+  },
+  video: {
+    maxWidth: "100%",
+    marginTop: "10px",
+    borderRadius: "8px",
   },
 });

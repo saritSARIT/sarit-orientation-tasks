@@ -24,7 +24,7 @@ export const DeletePostPage: FC = () => {
     queryFn: getPosts,
   });
 
-  const { mutate } = useMutation({
+  const { mutate: deletePostMutate } = useMutation({
     mutationKey: queryKeys.posts.delete,
     mutationFn: deletePost,
     onSuccess: (deletedPost) => {
@@ -51,7 +51,7 @@ export const DeletePostPage: FC = () => {
               type="button"
               className={classes.button}
               onClick={() => {
-                mutate(post._id);
+                deletePostMutate(post._id);
               }}
             >
               {t("BUTTON")}

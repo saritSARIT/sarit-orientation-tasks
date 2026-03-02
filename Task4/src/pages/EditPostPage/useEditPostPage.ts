@@ -29,9 +29,10 @@ export const useEditPostPage = () => {
     queryKey: queryKeys.posts.all,
     queryFn: getPosts,
   });
+
   const selectedPost = find(matchesProperty("_id", selectedPostId), posts);
 
-  const { mutate, error: editError } = useMutation<
+  const { mutate: editPostMutate, error: editPostError } = useMutation<
     Post,
     Error,
     Partial<PostPayload>
@@ -48,6 +49,7 @@ export const useEditPostPage = () => {
       );
     },
   });
+
   const submit = (data: Partial<PostPayload>): void => {
     const updatedData = pickBy(
       // Lodash types' fault
@@ -55,10 +57,12 @@ export const useEditPostPage = () => {
       (value, key) => value !== (selectedPost![key as keyof PostPayload] ?? ""),
       data,
     );
+
     isEmpty(updatedData)
       ? toast.success(t("TOAST_SUCCESS2"))
-      : mutate(updatedData);
+      : editPostMutate(updatedData);
   };
+
   return {
     posts,
     isLoading,
@@ -66,6 +70,6 @@ export const useEditPostPage = () => {
     setSelectedPostId,
     submit,
     queryError,
-    editError,
+    editPostError,
   };
 };

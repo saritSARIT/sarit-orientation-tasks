@@ -10,6 +10,7 @@ export const useStyles = createUseStyles({
     marginBottom: 50,
   },
   list: {
+    listStyle: "none",
     display: "flex",
     justifyContent: "center",
     gap: 30,

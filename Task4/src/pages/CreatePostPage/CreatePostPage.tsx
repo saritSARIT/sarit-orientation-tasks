@@ -16,12 +16,9 @@ export const CreatePostPage: FC = () => {
   });
   const queryClient = useQueryClient();
 
-  const { mutate, error } = useMutation({
+  const { mutate: createPostMutate, error: createPostError } = useMutation({
     mutationKey: queryKeys.posts.create,
-    mutationFn: async (data: PostPayload) =>
-      await createPost({
-        ...data,
-      }),
+    mutationFn: createPost,
     onSuccess: (newPost) => {
       toast.success(t("TOAST_SUCCESS"));
       queryClient.setQueryData<PostPayload[]>(
@@ -36,9 +33,9 @@ export const CreatePostPage: FC = () => {
       <h1 className={classes.title}>{t("TITLE")}</h1>
 
       <PostForm
-        submit={mutate}
+        submit={createPostMutate}
         submitButtonText={t("BUTTON")}
-        error={error?.message}
+        error={createPostError?.message}
       />
     </div>
   );
