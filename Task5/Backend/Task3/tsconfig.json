@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "target": "esnext",
+        "module": "commonjs",
+        "sourceMap": true,
+        "outDir": "dist/src",
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true,
+        "typeRoots": ["./node_modules/@types", "./typings"],
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "noEmit": true,
+   
+        
+    },
+    "exclude": ["node_modules"]
+}
+
+ 
+ 
