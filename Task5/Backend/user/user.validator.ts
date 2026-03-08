@@ -7,3 +7,8 @@ export const createUserSchema = Joi.object({
   }).required(),
 });
 
+export const loginSchema = Joi.object({
+  body: Joi.object({
+    username: Joi.string().required(),
+  }).required(),
+});

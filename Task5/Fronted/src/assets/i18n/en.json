@@ -1,5 +1,9 @@
 {
   "PAGES": {
+    "LOGIN": {
+      "PLACEHOLDER": "Enter your username",
+      "BUTTON": "Login"
+    },
     "HOME": {
       "ROUTE": "HomePage",
       "TITLE": "Hello you are welcome to choose the required category."

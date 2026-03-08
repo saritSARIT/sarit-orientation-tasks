@@ -6,4 +6,7 @@ export const userRepository = {
     await userSchema.create(data),
 
   getAllUsers: async (): Promise<User[]> => await userSchema.find(),
+
+   getUserByUsername: async (username: string): Promise<User | null> =>
+    await userSchema.findOne({ username }),
 };
