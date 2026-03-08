@@ -6,7 +6,9 @@ import { useTranslation } from "react-i18next";
 
 export const Navbar: FC = () => {
   const classes = useStyles();
-  const { t } = useTranslation("translation", { keyPrefix: "PAGES"});
+  const { t } = useTranslation("translation", { keyPrefix: "PAGES" });
+
+  const currentUser = JSON.parse(localStorage.getItem("user") || "null");
 
   return (
     <nav className={classes.navbar}>
@@ -29,20 +31,38 @@ export const Navbar: FC = () => {
         {t("POST.ROUTE")}
       </Link>
 
-      <Link
-        to={`/${ROUTES.POSTS.ROOT}/${ROUTES.POSTS.CREATE}`}
-        className={classes.navLink}
-      >
-        {t("CREATE_POST.ROUTE")}
-      </Link>
+      {currentUser && (
+        <Link
+          to={`/${ROUTES.POSTS.ROOT}/${ROUTES.POSTS.CREATE}`}
+          className={classes.navLink}
+        >
+          {t("CREATE_POST.ROUTE")}
+        </Link>
+      )}
 
-      <Link to={`/${ROUTES.POSTS.ROOT}/${ROUTES.POSTS.EDIT}`} className={classes.navLink}>
-        {t("EDIT_POST.ROUTE")}
-      </Link>
+      {currentUser && (
+        <Link
+          to={`/${ROUTES.POSTS.ROOT}/${ROUTES.POSTS.EDIT}`}
+          className={classes.navLink}
+        >
+          {t("EDIT_POST.ROUTE")}
+        </Link>
+      )}
 
-      <Link to={`/${ROUTES.POSTS.ROOT}/${ROUTES.POSTS.DELETE}`} className={classes.navLink}>
-        {t("DELETE_POST.ROUTE")}
-      </Link>
+      {currentUser && (
+        <Link
+          to={`/${ROUTES.POSTS.ROOT}/${ROUTES.POSTS.DELETE}`}
+          className={classes.navLink}
+        >
+          {t("DELETE_POST.ROUTE")}
+        </Link>
+      )}
+
+      {!currentUser && (
+        <Link to="/login" className={classes.navLink}>
+          Login
+        </Link>
+      )}
     </nav>
   );
 };

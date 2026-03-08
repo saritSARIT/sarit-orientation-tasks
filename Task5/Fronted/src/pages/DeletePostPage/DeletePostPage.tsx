@@ -13,7 +13,13 @@ export const DeletePostPage: FC = () => {
   const { t } = useTranslation("translation", {
     keyPrefix: "PAGES.DELETE_POST",
   });
+
   const queryClient = useQueryClient();
+  const currentUser = JSON.parse(localStorage.getItem("user") || "null");
+
+  if (!currentUser) {
+    return <p>You must login to delete posts</p>;
+  }
 
   const {
     data: posts = [],
@@ -23,6 +29,11 @@ export const DeletePostPage: FC = () => {
     queryKey: queryKeys.posts.all,
     queryFn: getPosts,
   });
+
+  const userPosts = filter(
+    (post) => post.userId === currentUser._id,
+    posts,
+  );
 
   const { mutate: deletePostMutate } = useMutation({
     mutationKey: queryKeys.posts.delete,
@@ -39,7 +50,7 @@ export const DeletePostPage: FC = () => {
     <div className={classes.container}>
       <h1 className={classes.title}>{t("TITLE")}</h1>
 
-      {isLoading ? <Loader /> : null}
+      {isLoading && <Loader />}
 
       {!isNil(error) && <p>{error.message}</p>}
 
@@ -48,6 +59,7 @@ export const DeletePostPage: FC = () => {
           (post) => (
             <div key={post._id} className={classes.card}>
               <h3>{post.postName}</h3>
+
               <button
                 type="button"
                 className={classes.button}
@@ -57,7 +69,7 @@ export const DeletePostPage: FC = () => {
               </button>
             </div>
           ),
-          posts,
+          userPosts,
         )}
       </div>
     </div>

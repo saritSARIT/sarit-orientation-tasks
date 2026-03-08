@@ -8,6 +8,7 @@ import EditPostPage from "@pages/EditPostPage";
 import DeletePostPage from "@pages/DeletePostPage";
 import PostsPage from "@pages/PostsPage";
 import HomePage from "@pages/HomePage";
+import LoginPage from "@pages/LoginPage";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,12 @@ export const router = createBrowserRouter([
         path: ROUTES.HOME,
         element: <HomePage />,
       },
+
+      {
+        path: ROUTES.LOGIN,
+        element: <LoginPage />,
+      },
+
       {
         path: ROUTES.USERS.ROOT,
         children: [
@@ -29,6 +36,7 @@ export const router = createBrowserRouter([
           { path: ROUTES.USERS.CREATE, element: <CreateUserPage /> },
         ],
       },
+
       {
         path: ROUTES.POSTS.ROOT,
         children: [

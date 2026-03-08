@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { validateRequest } from "../middlewares/validate";
-import { createUserSchema } from "./user.validator";
+import { createUserSchema, loginSchema } from "./user.validator";
 import { userController } from "./user.controller";
 import { warpController } from "../utils/wrapperFunctions";
 
@@ -10,6 +10,11 @@ userRoutes.post(
   "/",
   validateRequest(createUserSchema),
   warpController(userController.createUser),
+);
+userRoutes.post(
+  "/login",
+  validateRequest(loginSchema),
+  warpController(userController.login),
 );
 userRoutes.get("/", warpController(userController.getAllUsers));
 

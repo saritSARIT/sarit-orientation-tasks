@@ -11,4 +11,10 @@ export const userController = {
     const users = await userManager.getAllUsers();
     res.json(users);
   },
+
+  login: async (req: Request, res: Response) => {
+    const { username } = req.body;
+    const user = await userManager.login(username);
+    res.json(user);
+  },
 };

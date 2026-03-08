@@ -5,3 +5,6 @@ export const getUsers = async (): Promise<User[]> => await api.get("/users");
 
 export const createUser = async (data: UserPayload): Promise<User> =>
   await api.post("/users", data);
+
+export const login = async (username: string): Promise<User> =>
+  await api.post("/users/login", { username });
