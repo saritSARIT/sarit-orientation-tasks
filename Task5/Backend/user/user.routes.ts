@@ -11,11 +11,13 @@ userRoutes.post(
   validateRequest(createUserSchema),
   warpController(userController.createUser),
 );
+
 userRoutes.post(
   "/login",
   validateRequest(loginSchema),
   warpController(userController.login),
 );
+
 userRoutes.get("/", warpController(userController.getAllUsers));
 
 export default userRoutes;

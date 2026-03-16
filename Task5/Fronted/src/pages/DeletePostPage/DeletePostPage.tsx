@@ -10,35 +10,24 @@ import { queryKeys } from "@api/queryKeys";
 
 export const DeletePostPage: FC = () => {
   const classes = useStyles();
-  const { t } = useTranslation("translation", {
-    keyPrefix: "PAGES.DELETE_POST",
-  });
-
+  const { t } = useTranslation("translation", { keyPrefix: "PAGES.DELETE_POST" });
   const queryClient = useQueryClient();
-  const currentUser = JSON.parse(localStorage.getItem("user") || "null");
+  const currentUser = queryClient.getQueryData<{ _id: string }>(['currentUser']);
 
-  if (!currentUser) {
-    return <p>You must login to delete posts</p>;
-  }
-
-  const {
-    data: posts = [],
-    error,
-    isLoading,
-  } = useQuery({
+  const { data: posts = [], error, isLoading } = useQuery({
     queryKey: queryKeys.posts.all,
     queryFn: getPosts,
   });
 
   const userPosts = filter(
-    (post) => post.userId === currentUser._id,
+    (post: Post) => post.userId === currentUser?._id,
     posts,
   );
 
   const { mutate: deletePostMutate } = useMutation({
     mutationKey: queryKeys.posts.delete,
     mutationFn: deletePost,
-    onSuccess: (deletedPost) => {
+    onSuccess: (deletedPost: Post) => {
       queryClient.setQueryData<Post[]>(
         queryKeys.posts.all,
         filter((post) => post._id !== deletedPost._id),
@@ -51,15 +40,13 @@ export const DeletePostPage: FC = () => {
       <h1 className={classes.title}>{t("TITLE")}</h1>
 
       {isLoading && <Loader />}
-
       {!isNil(error) && <p>{error.message}</p>}
 
       <div className={classes.list}>
         {map(
-          (post) => (
+          (post: Post) => (
             <div key={post._id} className={classes.card}>
               <h3>{post.postName}</h3>
-
               <button
                 type="button"
                 className={classes.button}

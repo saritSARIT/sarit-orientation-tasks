@@ -1,6 +1,8 @@
 {
   "PAGES": {
     "LOGIN": {
+      "ROUTE": "Login",
+      "TITLE": "Login",
       "PLACEHOLDER": "Enter your username",
       "BUTTON": "Login"
     },

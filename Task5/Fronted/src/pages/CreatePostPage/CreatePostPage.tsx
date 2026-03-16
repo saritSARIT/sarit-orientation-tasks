@@ -11,23 +11,16 @@ import { queryKeys } from "@api/queryKeys";
 
 export const CreatePostPage: FC = () => {
   const classes = useStyles();
-  const { t } = useTranslation("translation", {
-    keyPrefix: "PAGES.CREATE_POST",
-  });
-
+  const { t } = useTranslation("translation", { keyPrefix: "PAGES.CREATE_POST" });
   const queryClient = useQueryClient();
-  const currentUser = JSON.parse(localStorage.getItem("user") || "null");
-
-  if (!currentUser) {
-    return <p>You must login to create a post</p>;
-  }
+  const currentUser = queryClient.getQueryData<{ _id: string }>(['currentUser']);
 
   const { mutate: createPostMutate, error: createPostError } = useMutation({
     mutationKey: queryKeys.posts.create,
-    mutationFn: createPost,
-    onSuccess: (newPost) => {
+    mutationFn: (data: PostPayload) =>
+      createPost({ ...data, userId: currentUser!._id }),
+    onSuccess: (newPost: PostPayload) => {
       toast.success(t("TOAST_SUCCESS"));
-
       queryClient.setQueryData<PostPayload[]>(
         queryKeys.posts.all,
         (oldPosts = []) => concat(oldPosts, newPost),

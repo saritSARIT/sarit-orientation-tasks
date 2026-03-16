@@ -3,18 +3,22 @@ import { userManager } from "./user.manager";
 import { StatusCodes } from "http-status-codes";
 
 export const userController = {
+  
   createUser: async (req: Request, res: Response) => {
     const user = await userManager.createUser(req.body);
+
     res.status(StatusCodes.CREATED).json(user);
   },
+
   getAllUsers: async (req: Request, res: Response) => {
     const users = await userManager.getAllUsers();
+
     res.json(users);
   },
 
   login: async (req: Request, res: Response) => {
-    const { username } = req.body;
-    const user = await userManager.login(username);
+    const user = await userManager.login(req.body.username);
+
     res.json(user);
   },
 };
