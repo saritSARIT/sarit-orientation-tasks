@@ -9,7 +9,7 @@ const throwError = (message: string): void => {
   throw new Error(message);
 }
 
-export const databaseConnect = () => { 
+export const databaseConnect = (): void => { 
 (!databaseUri) && throwError("Missing database URI in environment variables"),
 
 connect(databaseUri)

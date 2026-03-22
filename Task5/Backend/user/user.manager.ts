@@ -9,18 +9,18 @@ export const userManager = {
   getAllUsers: async (): Promise<User[]> => await userRepository.getAllUsers(),
 
   login: async (username: string) => {
-    try {
-      const user = await userRepository.getUserByUsername(username);
-
-      const token = jwt.sign(
-        { userId: user._id },
-        process.env.JWT_SECRET as string,
-        { expiresIn: "1d" },
-      );
-
-      return { user, token };
-    } catch {
+  const user = await userRepository
+    .getUserByUsername(username)
+    .catch(() => {
       throw new Error("User not found");
-    }
-  },
+    });
+
+  const token = jwt.sign(
+    { userId: user._id },
+    process.env.JWT_SECRET as string,
+    { expiresIn: "1d" },
+  );
+
+  return { user, token };
+},
 };

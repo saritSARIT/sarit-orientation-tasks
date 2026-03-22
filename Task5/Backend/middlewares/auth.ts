@@ -1,26 +1,21 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import  jwt from "jsonwebtoken";
+import { flow, get } from "lodash/fp";
 
-export const auth = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const authHeader = req.headers.authorization;
+export const auth = (request: Request, response: Response, next: NextFunction) => {
+  const token = flow(
+    get("headers.authorization"),
+    (authHeader) => authHeader?.split(" ")[1]
+  )(request);
 
-  if (!authHeader) {
-    return res.status(401).json({ message: "Unauthorized" });
+  if (!token) {
+    return response.status(401).json({ message: "Unauthorized" });
   }
 
-  const token = authHeader.split(" ")[1];
-
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-
-    (req as any).user = decoded;
-
+    request.user = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: string };
     next();
   } catch {
-    return res.status(401).json({ message: "Invalid token" });
+    return response.status(401).json({ message: "Invalid token" });
   }
 };
