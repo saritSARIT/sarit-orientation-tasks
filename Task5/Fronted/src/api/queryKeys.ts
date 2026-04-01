@@ -1,3 +1,4 @@
+
 export const queryKeys = {
   posts: {
     all: ["get", "post"],
@@ -9,4 +10,8 @@ export const queryKeys = {
     all: ["get", "user"],
     create: ["create", "user"],
   },
+};
+
+export const mutationKeys = {
+  login: ["login"],
 };

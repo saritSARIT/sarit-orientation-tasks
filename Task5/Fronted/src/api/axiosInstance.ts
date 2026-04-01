@@ -3,6 +3,16 @@ import { get } from "lodash/fp";
 
 const { VITE_BASE_URL } = import.meta.env;
 
+let authToken: string | null = null;
+
+export const updateToken = (token: string | null) => {
+  authToken = token;
+
+  token
+    ? localStorage.setItem("token", token)
+    : localStorage.removeItem("token");
+};
+
 export const api = axios.create({
   baseURL: VITE_BASE_URL,
   headers: {
@@ -12,12 +22,11 @@ export const api = axios.create({
   },
 });
 
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+authToken = localStorage.getItem("token");
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+api.interceptors.request.use((config) => {
+
+  authToken??config.headers.Authorization = `Bearer ${authToken}`;
 
   return config;
 });

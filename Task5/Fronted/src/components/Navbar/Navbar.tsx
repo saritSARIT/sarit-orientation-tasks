@@ -3,15 +3,17 @@ import { useStyles } from "./styles";
 import type { FC } from "react";
 import { ROUTES } from "../Router/consts";
 import { useTranslation } from "react-i18next";
-import { useQueryClient } from "@tanstack/react-query";
-import { User } from "src/types/user";
+import { useMutationState } from "@tanstack/react-query";
+import type { User } from "src/types/user";
+import { mutationKeys } from "@api/queryKeys";
 
 export const Navbar: FC = () => {
   const classes = useStyles();
   const { t } = useTranslation("translation", { keyPrefix: "PAGES" });
-  const queryClient = useQueryClient();
+  const [{ currentUser }] = useMutationState<{ currentUser: User }>({
+    filters: { mutationKey: mutationKeys.login },
+  });
 
-const currentUser = queryClient.getQueryData<User>(['currentUser']);
   return (
     <nav className={classes.navbar}>
       <Link to={ROUTES.HOME} className={classes.navLink}>
@@ -32,8 +34,8 @@ const currentUser = queryClient.getQueryData<User>(['currentUser']);
       <Link to={`/${ROUTES.POSTS.ROOT}`} className={classes.navLink}>
         {t("POST.ROUTE")}
       </Link>
-
-      {currentUser && (
+      
+      {currentUser ? (
         <>
           <Link
             to={`/${ROUTES.POSTS.ROOT}/${ROUTES.POSTS.CREATE}`}
@@ -56,6 +58,10 @@ const currentUser = queryClient.getQueryData<User>(['currentUser']);
             {t("DELETE_POST.ROUTE")}
           </Link>
         </>
+      ) : (
+        <Link to="/login" className={classes.navLink}>
+          {t("LOGIN.ROUTE")}
+        </Link>
       )}
 
       {!currentUser && (

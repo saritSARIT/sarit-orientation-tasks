@@ -12,7 +12,9 @@ export const EditPostPage: FC = () => {
   const classes = useStyles();
   const { t } = useTranslation("translation", { keyPrefix: "PAGES.EDIT_POST" });
   const queryClient = useQueryClient();
-  const currentUser = queryClient.getQueryData<{ _id: string }>(['currentUser']);
+  const currentUser = queryClient.getQueryData<{ _id: string }>([
+    "currentUser",
+  ]);
 
   const {
     posts,
@@ -33,9 +35,11 @@ export const EditPostPage: FC = () => {
     <div className={classes.container}>
       <h1 className={classes.title}>{t("TITLE")}</h1>
 
-      {isLoading && <Loader />}
+      {isNil(isLoading) && <Loader />}
       {!isNil(queryError) && <p>{t("ERROR")}</p>}
-      {!isNil(editPostError) && <p className={classes.error}>{editPostError.message}</p>}
+      {!isNil(editPostError) && (
+        <p className={classes.error}>{editPostError.message}</p>
+      )}
 
       <div className={classes.list}>
         {map(
@@ -45,7 +49,9 @@ export const EditPostPage: FC = () => {
               <button
                 type="button"
                 className={classes.button}
-                onClick={() => setSelectedPostId(post._id)}
+                onClick={() => {
+                  setSelectedPostId(post._id);
+                }}
               >
                 {t("BUTTON")}
               </button>
@@ -55,14 +61,14 @@ export const EditPostPage: FC = () => {
         )}
       </div>
 
-      {selectedPost && (
+      {selectedPost ? (
         <PostForm
           submit={submit}
           submitButtonText={t("SUBMIT_BUTTON_TEXT")}
           error={editPostError?.message}
           defaultValues={selectedPost}
         />
-      )}
+      ) : null}
     </div>
   );
 };

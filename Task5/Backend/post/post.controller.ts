@@ -4,27 +4,37 @@ import { StatusCodes } from "http-status-codes";
 import type { Post } from "../types/post";
 
 export const postController = {
-  createPost: async (req: Request, res: Response) => {
-    const post = await postManager.createPost(req.body);
-    res.status(StatusCodes.CREATED).json(post);
+  createPost: async (request: Request<object, object, Post>, response: Response): Promise<void> => {
+    const post = await postManager.createPost(request.body);
+    response.status(StatusCodes.CREATED).json(post);
   },
-  getAllPosts: async (req: Request, res: Response) => {
+
+  getAllPosts: async (request: Request, response: Response): Promise<void> => {
     const posts = await postManager.getAllPosts();
-    res.json(posts);
+    response.json(posts);
   },
 
-  getPostById: async (req: Request<{ id: string }>, res: Response) => {
-    const post = await postManager.getPostById(req.params.id);
-    res.json(post);
+  getPostById: async (
+    request: Request<{ id: string }>,
+    response: Response,
+  ): Promise<void> => {
+    const post = await postManager.getPostById(request.params.id);
+    response.json(post);
   },
 
-  updatePost: async (req: Request<{ id: string }, Post>, res: Response) => {
-    const post = await postManager.updatePost(req.params.id, req.body);
-    res.json(post);
+  updatePost: async (
+    request: Request<{ id: string }, object, Post>,
+    response: Response,
+  ): Promise<void> => {
+    const post = await postManager.updatePost(request.params.id, request.body);
+    response.json(post);
   },
 
-  deletePost: async (req: Request<{ id: string }>, res: Response) => {
-    const post = await postManager.deletePost(req.params.id);
-    res.json(post);
+  deletePost: async (
+    request: Request<{ id: string }>,
+    response: Response,
+  ): Promise<void> => {
+    const post = await postManager.deletePost(request.params.id);
+    response.json(post);
   },
 };

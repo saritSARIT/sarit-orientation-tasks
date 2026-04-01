@@ -1,6 +1,6 @@
-import { HTMLInputTypeAttribute } from "react";
+import type { HTMLInputTypeAttribute } from "react";
 
-export type FormInputProps = {
+export type FormInputProperties = {
   name: string;
   placeholder: string;
   type?: HTMLInputTypeAttribute;

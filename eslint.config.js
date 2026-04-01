@@ -197,7 +197,7 @@ export default defineConfig([
   },
   {
     //frontend configuration
-    files: ["Task1/**", "Task4/**"],
+    files: ["Task1/**", "Task4/**","Task5/Fronted/**"],
 
     languageOptions: { globals: globals.browser },
 
@@ -299,7 +299,7 @@ export default defineConfig([
   },
   {
     //backend configuration
-    files: ["Task2/**", "Task3/**"],
+    files: ["Task2/**", "Task3/**","Task5/Backend/**"],
     languageOptions: { globals: globals.node },
 
     rules: {
@@ -317,8 +317,20 @@ export default defineConfig([
   {
     files: ["**/*.d.ts"],
     rules: {
-      // sometimes you have to defined interfaces on declaration files
+      //sometimes type files need to be imported to apply their types
+      "import/no-unassigned-import": "off",
+      //.d.ts files might have complex types
+      "@typescript-eslint/no-unnecessary-type-parameters": "off",
+      //sometimes method signatures are required in interfaces
+      "@typescript-eslint/method-signature-style": "off",
+      "functional/prefer-property-signatures": "off",
+      //required to preserve interface signatures
       "@typescript-eslint/consistent-type-definitions": "off",
+      "@typescript-eslint/naming-convention": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/prefer-function-type": "off",
+      "unicorn/prevent-abbreviations": "off",
     },
   },
 ]);

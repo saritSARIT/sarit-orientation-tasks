@@ -1,21 +1,34 @@
-import { Request, Response, NextFunction } from "express";
-import  jwt from "jsonwebtoken";
-import { flow, get } from "lodash/fp";
+import type { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import { get, isNil } from "lodash/fp";
+import { pipe } from "ts-functional-pipe";
+import { StatusCodes } from "http-status-codes";
 
-export const auth = (request: Request, response: Response, next: NextFunction) => {
-  const token = flow(
+export const auth = (
+  request: Request,
+  response: Response,
+  next: NextFunction,
+): void => {
+  const token = pipe(
     get("headers.authorization"),
-    (authHeader) => authHeader?.split(" ")[1]
+    (authHeader: string | undefined) => authHeader?.split(" ")[1],
   )(request);
 
-  if (!token) {
-    return response.status(401).json({ message: "Unauthorized" });
-  }
+  isNil(token) &&
+    response.status(StatusCodes.UNAUTHORIZED).json({ message: "Unauthorized" });
 
+  // Jwt throws an error so we have no choice but to use this
+  // eslint-disable-next-line functional/no-try-statements
   try {
-    request.user = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: string };
+    //
+    // eslint-disable-next-line functional/immutable-data, @typescript-eslint/no-unsafe-type-assertion, @typescript-eslint/no-non-null-assertion
+    request.user = jwt.verify(token!, process.env.JWT_SECRET!) as {
+      userId: string;
+    };
     next();
   } catch {
-    return response.status(401).json({ message: "Invalid token" });
+    response
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: "Invalid token" });
   }
 };

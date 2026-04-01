@@ -2,7 +2,7 @@ import Joi from "joi";
 import { Types } from "mongoose";
 import { maxLength } from "./post.consts";
 
-const objectIdValidator = (value: string, helpers: Joi.CustomHelpers) =>
+const objectIdValidator = (value: string, helpers: Joi.CustomHelpers): string | Joi.ErrorReport =>
   Types.ObjectId.isValid(value) ? value : helpers.error("any.invalid");
 
 export const createPostSchema = Joi.object({

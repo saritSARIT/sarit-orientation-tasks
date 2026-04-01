@@ -1,27 +1,25 @@
 import type { FC } from "react";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { login } from "@api/users";
 import Loader from "@components/Loader";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { mutationKeys } from "@api/queryKeys";
+import { isNil } from "lodash/fp";
+import { updateToken } from "@api/axiosInstance";
 
 export const LoginPage: FC = () => {
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
   const { t } = useTranslation("translation", { keyPrefix: "PAGES.LOGIN" });
 
-  const queryClient = useQueryClient();
-
-  const { mutate, isPending, error } = useMutation({
+  const { mutate, isLoading, error } = useMutation({
+    mutationKey: mutationKeys.login,
     mutationFn: login,
     onSuccess: (data) => {
-      queryClient.setQueryData(["currentUser"], data.user);
-      queryClient.setQueryData(["token"], data.token);
-
+      updateToken(data.token);
       navigate("/");
-
-      window.location.reload();
     },
   });
 
@@ -31,14 +29,16 @@ export const LoginPage: FC = () => {
 
       <input
         value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        onChange={(event) => {
+          setUsername(event.target.value);
+        }}
         placeholder={t("PLACEHOLDER")}
       />
 
       <button onClick={() => mutate(username)}>{t("BUTTON")}</button>
 
-      {isPending && <Loader />}
-      {error && <p>{error.message}</p>}
+      {isNil(isLoading) && <Loader />}
+      {!isNil(error) && <p>{error.message}</p>}
     </div>
   );
 };
