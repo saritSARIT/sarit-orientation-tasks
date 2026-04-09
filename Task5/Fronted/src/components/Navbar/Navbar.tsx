@@ -10,7 +10,7 @@ import { mutationKeys } from "@api/queryKeys";
 export const Navbar: FC = () => {
   const classes = useStyles();
   const { t } = useTranslation("translation", { keyPrefix: "PAGES" });
-  const [{ currentUser }] = useMutationState<{ currentUser: User }>({
+  const [{ currentUser }] = useMutationState<{ currentUser?: User }>({
     filters: { mutationKey: mutationKeys.login },
   });
 

@@ -1,10 +1,8 @@
 import dotenv from "dotenv";
+import { throwError } from "./utils/errors";
+import type { SignOptions } from "jsonwebtoken";
 
 dotenv.config();
-
-const throwError = (message: string): never => {
-  throw new Error(message);
-};
 
 export const config = {
   port: process.env.PORT ?? "3000",
@@ -21,5 +19,6 @@ export const config = {
     process.env.JWT_SECRET ??
     throwError("Missing JWT_SECRET in environment variables"),
 
-  jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? "1h",
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+  jwtExpiresIn: process.env.JWT_EXPIRES_IN as SignOptions["expiresIn"] ?? "1h" ,
 };

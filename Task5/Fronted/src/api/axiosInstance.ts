@@ -1,17 +1,7 @@
 import axios from "axios";
-import { get } from "lodash/fp";
+import { get, set } from "lodash/fp";
 
 const { VITE_BASE_URL } = import.meta.env;
-
-let authToken: string | null = null;
-
-export const updateToken = (token: string | null) => {
-  authToken = token;
-
-  token
-    ? localStorage.setItem("token", token)
-    : localStorage.removeItem("token");
-};
 
 export const api = axios.create({
   baseURL: VITE_BASE_URL,
@@ -22,13 +12,8 @@ export const api = axios.create({
   },
 });
 
-authToken = localStorage.getItem("token");
+export const updateToken = (token: string): void => {
+  api.interceptors.request.use(set("headers.Authorization", `Bearer ${token}`));
+};
 
-api.interceptors.request.use((config) => {
-
-  authToken??config.headers.Authorization = `Bearer ${authToken}`;
-
-  return config;
-});
-
-api.interceptors.response.use((response) => get("data", response));
+api.interceptors.response.use(get("data"));

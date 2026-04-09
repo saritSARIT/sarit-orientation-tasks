@@ -2,17 +2,20 @@ import type { FC } from "react";
 import { getPosts, deletePost } from "@api/posts";
 import { useStyles } from "./styles";
 import type { Post } from "../../types/post";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, useMutationState } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { filter, isNil, map } from "lodash/fp";
 import Loader from "@components/Loader";
-import { queryKeys } from "@api/queryKeys";
+import { mutationKeys, queryKeys } from "@api/queryKeys";
+import type { User } from "src/types/user";
 
 export const DeletePostPage: FC = () => {
   const classes = useStyles();
   const { t } = useTranslation("translation", { keyPrefix: "PAGES.DELETE_POST" });
   const queryClient = useQueryClient();
-  const currentUser = queryClient.getQueryData<{ _id: string }>(["currentUser"]);
+ const [{ currentUser }] = useMutationState<{ currentUser: User }>({
+    filters: { mutationKey: mutationKeys.login },
+  });
 
   const { data: posts = [], error, isLoading } = useQuery({
     queryKey: queryKeys.posts.all,
@@ -20,7 +23,7 @@ export const DeletePostPage: FC = () => {
   });
 
   const userPosts = filter(
-    (post: Post) => post.userId === currentUser?._id,
+    (post: Post) => post.userId === currentUser._id,
     posts,
   );
 

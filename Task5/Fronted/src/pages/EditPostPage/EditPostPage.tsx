@@ -5,16 +5,17 @@ import { useTranslation } from "react-i18next";
 import { map, isNil, filter } from "lodash/fp";
 import Loader from "@components/Loader";
 import { useEditPostPage } from "./useEditPostPage";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutationState } from "@tanstack/react-query";
 import type { Post } from "../../types/post";
+import { mutationKeys } from "@api/queryKeys";
+import type { User } from "src/types/user";
 
 export const EditPostPage: FC = () => {
   const classes = useStyles();
   const { t } = useTranslation("translation", { keyPrefix: "PAGES.EDIT_POST" });
-  const queryClient = useQueryClient();
-  const currentUser = queryClient.getQueryData<{ _id: string }>([
-    "currentUser",
-  ]);
+  const [{ currentUser }] = useMutationState<{ currentUser: User }>({
+    filters: { mutationKey: mutationKeys.login },
+  });
 
   const {
     posts,
@@ -27,7 +28,7 @@ export const EditPostPage: FC = () => {
   } = useEditPostPage();
 
   const userPosts = filter(
-    (post: Post) => post.userId === currentUser?._id,
+    (post: Post) => post.userId === currentUser._id,
     posts,
   );
 

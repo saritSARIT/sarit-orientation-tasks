@@ -2,6 +2,7 @@ import { userRepository } from "./user.repository";
 import type { User } from "../types/user";
 import jwt from "jsonwebtoken";
 import { config } from "../config";
+import { throwError } from "../utils/errors";
 
 export const userManager = {
   createUser: async (data: User): Promise<User> =>
@@ -13,11 +14,13 @@ export const userManager = {
   login: async (
     username: string
   ): Promise<{ user: User; token: string }> => {
-    const user = await userRepository
+    //Ts problem
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const user = (await userRepository
       .getUserByUsername(username)
       .catch(() => {
-        throw new Error("User not found");
-      });
+        throwError("User not found");
+      }))!;
 
     const token = jwt.sign(
       { userId: user._id },

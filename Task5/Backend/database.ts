@@ -6,7 +6,7 @@ export const databaseConnect = (): void => {
     .then(() => {
       console.log("Connected to MongoDB!");
     })
-    .catch((error) => {
+    .catch((error:unknown) => {
       console.error("Error connecting to MongoDB:", error);
     });
 };

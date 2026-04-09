@@ -1,12 +1,11 @@
-import type { FC } from "react";
-import { useState } from "react";
+import  {type FC,useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "@api/users";
 import Loader from "@components/Loader";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { mutationKeys } from "@api/queryKeys";
-import { isNil } from "lodash/fp";
+import { isNil, noop } from "lodash/fp";
 import { updateToken } from "@api/axiosInstance";
 
 export const LoginPage: FC = () => {
@@ -14,12 +13,12 @@ export const LoginPage: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation("translation", { keyPrefix: "PAGES.LOGIN" });
 
-  const { mutate, isLoading, error } = useMutation({
+  const { mutate, isPending, error } = useMutation({
     mutationKey: mutationKeys.login,
     mutationFn: login,
     onSuccess: (data) => {
       updateToken(data.token);
-      navigate("/");
+      navigate("/")?.catch(noop);
     },
   });
 
@@ -29,15 +28,17 @@ export const LoginPage: FC = () => {
 
       <input
         value={username}
-        onChange={(event) => {
+        placeholder={t("PLACEHOLDER")}
+         onChange={(event) => {
           setUsername(event.target.value);
         }}
-        placeholder={t("PLACEHOLDER")}
       />
 
-      <button onClick={() => mutate(username)}>{t("BUTTON")}</button>
+      <button type="button" onClick={() =>{ mutate(username)}}>
+        {t("BUTTON")}
+      </button>
 
-      {isNil(isLoading) && <Loader />}
+      {isNil(isPending) && <Loader />}
       {!isNil(error) && <p>{error.message}</p>}
     </div>
   );
