@@ -54,8 +54,8 @@ export const PostsPage: FC = () => {
                 //Requires use of JavaScript
                 // eslint-disable-next-line react/iframe-missing-sandbox
                 <iframe
-                  className={classes.iframe}
                   allowFullScreen
+                  className={classes.iframe}
                   width="100%"
                   height="315"
                   title="YouTube video"
@@ -65,7 +65,7 @@ export const PostsPage: FC = () => {
                   )}`}
                 />
               ) : (
-                <video className={classes.video} controls src={post.media} />
+                <video controls src={post.media} className={classes.video} />
               )}
             </li>
           ),

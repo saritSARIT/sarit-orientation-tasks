@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { get, isNil } from "lodash/fp";
 import { pipe } from "ts-functional-pipe";
 import { StatusCodes } from "http-status-codes";
+import { config } from "../config";
 
 export const auth = (
   request: Request,
@@ -22,7 +23,7 @@ export const auth = (
   try {
     //
     // eslint-disable-next-line functional/immutable-data, @typescript-eslint/no-unsafe-type-assertion, @typescript-eslint/no-non-null-assertion
-    request.user = jwt.verify(token!, process.env.JWT_SECRET!) as {
+    request.user = jwt.verify(token!, config.jwtSecret) as {
       userId: string;
     };
     next();
