@@ -1,5 +1,6 @@
 import { postRepository } from "./post.repository";
 import type { Post } from "../types/post";
+import { throwError } from "../utils/errors";
 
 export const postManager = {
   createPost: async (data: Post): Promise<Post> =>
@@ -10,9 +11,15 @@ export const postManager = {
   getPostById: async (postId: string): Promise<Post | null> =>
     await postRepository.getPostById(postId),
 
-  updatePost: async (postId: string, data: Post): Promise<Post | null> =>
-    await postRepository.updatePost(postId, data),
+  updatePost: async (postId: string, data: Post,userId: string,): Promise<Post | null> => {
+    !userId && throwError("Unauthorized");
 
-  deletePost: async (postId: string): Promise<Post | null> =>
-    await postRepository.deletePost(postId),
+    return await postRepository.updatePost(postId, data);
+  },
+
+  deletePost: async (postId: string, userId: string): Promise<Post | null> => {
+    !userId && throwError("Unauthorized");
+
+    return await postRepository.deletePost(postId);
+  },
 };

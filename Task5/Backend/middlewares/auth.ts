@@ -22,8 +22,8 @@ export const auth = (
   // eslint-disable-next-line functional/no-try-statements
   try {
     //
-    // eslint-disable-next-line functional/immutable-data, @typescript-eslint/no-unsafe-type-assertion, @typescript-eslint/no-non-null-assertion
-    request.user = jwt.verify(token!, config.jwtSecret) as {
+    // eslint-disable-next-line functional/immutable-data, @typescript-eslint/no-unsafe-type-assertion, @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+  (request as any).user = jwt.verify(token!, config.jwtSecret) as {
       userId: string;
     };
     next();

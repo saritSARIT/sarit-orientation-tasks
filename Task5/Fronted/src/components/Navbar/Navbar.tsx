@@ -10,9 +10,11 @@ import { mutationKeys } from "@api/queryKeys";
 export const Navbar: FC = () => {
   const classes = useStyles();
   const { t } = useTranslation("translation", { keyPrefix: "PAGES" });
-  const [{ currentUser }] = useMutationState<{ currentUser?: User }>({
+  const mutationState = useMutationState<{ currentUser?: User }>({
     filters: { mutationKey: mutationKeys.login },
   });
+
+  const currentUser = mutationState[0]?.currentUser;
 
   return (
     <nav className={classes.navbar}>
@@ -34,7 +36,7 @@ export const Navbar: FC = () => {
       <Link to={`/${ROUTES.POSTS.ROOT}`} className={classes.navLink}>
         {t("POST.ROUTE")}
       </Link>
-      
+
       {currentUser ? (
         <>
           <Link
@@ -64,11 +66,11 @@ export const Navbar: FC = () => {
         </Link>
       )}
 
-      {!currentUser && (
+      {/* {!currentUser && (
         <Link to="/login" className={classes.navLink}>
           {t("LOGIN.ROUTE")}
         </Link>
-      )}
+      )} */}
     </nav>
   );
 };

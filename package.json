@@ -18,8 +18,5 @@
   },
   "scripts": {
     "lint": "eslint ."
-  },
-  "dependencies": {
-    "react-hook-form": "^7.72.0"
   }
 }
