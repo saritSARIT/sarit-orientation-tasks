@@ -1,6 +1,5 @@
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
-import type { UserPayload } from "../../types/user";
 import { useStyles } from "./styles";
 import type { UserFormProps } from "./types";
 import { FormInput } from "../FormInput/FormInput";
@@ -11,13 +10,13 @@ export const UserForm: FC<UserFormProps> = ({ submitButtonText }) => {
 
   return (
     <div className={classes.form}>
-      <FormInput<UserPayload>
+      <FormInput
         name="username"
         placeholder={t("PLACEHOLDERS.USER_NAME")}
         requiredMessage={t("REQUIREDS.USER_NAME")}
       />
 
-      <FormInput<UserPayload>
+      <FormInput
         name="displayedName"
         placeholder={t("PLACEHOLDERS.DISPLAYED_NAME")}
         requiredMessage={t("REQUIREDS.DISPLAYED_NAME")}

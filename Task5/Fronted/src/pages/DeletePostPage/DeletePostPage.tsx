@@ -2,32 +2,35 @@ import type { FC } from "react";
 import { getPosts, deletePost } from "@api/posts";
 import { useStyles } from "./styles";
 import type { Post } from "../../types/post";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, useMutationState } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { filter, isNil, map } from "lodash/fp";
 import Loader from "@components/Loader";
-import { queryKeys } from "@api/queryKeys";
+import { mutationKeys, queryKeys } from "@api/queryKeys";
+import type { User } from "src/types/user";
 
 export const DeletePostPage: FC = () => {
   const classes = useStyles();
-  const { t } = useTranslation("translation", {
-    keyPrefix: "PAGES.DELETE_POST",
-  });
+  const { t } = useTranslation("translation", { keyPrefix: "PAGES.DELETE_POST" });
   const queryClient = useQueryClient();
+ const [{ currentUser }] = useMutationState<{ currentUser: User }>({
+    filters: { mutationKey: mutationKeys.login },
+  });
 
-  const {
-    data: posts = [],
-    error,
-    isLoading,
-  } = useQuery({
+  const { data: posts = [], error, isLoading } = useQuery({
     queryKey: queryKeys.posts.all,
     queryFn: getPosts,
   });
 
+  const userPosts = filter(
+    (post: Post) => post.userId === currentUser._id,
+    posts,
+  );
+
   const { mutate: deletePostMutate } = useMutation({
     mutationKey: queryKeys.posts.delete,
     mutationFn: deletePost,
-    onSuccess: (deletedPost) => {
+    onSuccess: (deletedPost: Post) => {
       queryClient.setQueryData<Post[]>(
         queryKeys.posts.all,
         filter((post) => post._id !== deletedPost._id),
@@ -39,25 +42,24 @@ export const DeletePostPage: FC = () => {
     <div className={classes.container}>
       <h1 className={classes.title}>{t("TITLE")}</h1>
 
-      {isLoading ? <Loader /> : null}
-
+       {isNil(isLoading) && <Loader />}
       {!isNil(error) && <p>{error.message}</p>}
 
       <div className={classes.list}>
         {map(
-          (post) => (
+          (post: Post) => (
             <div key={post._id} className={classes.card}>
               <h3>{post.postName}</h3>
               <button
                 type="button"
                 className={classes.button}
-                onClick={() => deletePostMutate(post._id)}
+                onClick={() => {deletePostMutate(post._id);}}
               >
                 {t("BUTTON")}
               </button>
             </div>
           ),
-          posts,
+          userPosts,
         )}
       </div>
     </div>

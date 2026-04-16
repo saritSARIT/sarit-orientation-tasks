@@ -4,14 +4,13 @@ import postRoutes from "./post/post.routes";
 import { errorHandler } from "./middlewares/errorHandler";
 import { databaseConnect } from "./database";
 import cors from "cors";
+import { config } from "./config";
 
 const app = express();
-const port = process.env.PORT;
-const { FRONTED_URL } = process.env;
 
 databaseConnect();
 
-app.use(cors({ origin: FRONTED_URL }));
+app.use(cors({ origin: config.frontedUrl }));
 
 app.use(express.json());
 
@@ -20,10 +19,10 @@ app.use("/posts", postRoutes);
 
 app.use(errorHandler);
 
-app.get("/", (req, res) => {
-  res.send("Server is running");
+app.get("/", (request, response) => {
+  response.send("Server is running");
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+app.listen(config.port, () => {
+  console.log(`Server running on port ${config.port}`);
 });

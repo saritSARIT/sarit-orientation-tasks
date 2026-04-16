@@ -2,13 +2,21 @@ import type { FC } from "react";
 import { PostForm } from "@components/PostForm/PostForm";
 import { useStyles } from "./styles";
 import { useTranslation } from "react-i18next";
-import { map, isNil } from "lodash/fp";
+import { map, isNil, filter } from "lodash/fp";
 import Loader from "@components/Loader";
 import { useEditPostPage } from "./useEditPostPage";
+import { useMutationState } from "@tanstack/react-query";
+import type { Post } from "../../types/post";
+import { mutationKeys } from "@api/queryKeys";
+import type { User } from "src/types/user";
 
 export const EditPostPage: FC = () => {
   const classes = useStyles();
   const { t } = useTranslation("translation", { keyPrefix: "PAGES.EDIT_POST" });
+  const [{ currentUser }] = useMutationState<{ currentUser: User }>({
+    filters: { mutationKey: mutationKeys.login },
+  });
+
   const {
     posts,
     isLoading,
@@ -19,20 +27,24 @@ export const EditPostPage: FC = () => {
     editPostError,
   } = useEditPostPage();
 
+  const userPosts = filter(
+    (post: Post) => post.userId === currentUser._id,
+    posts,
+  );
+
   return (
     <div className={classes.container}>
       <h1 className={classes.title}>{t("TITLE")}</h1>
 
       {isNil(isLoading) && <Loader />}
-      {isNil(queryError) ? null : <p>{t("ERROR")}</p>}
-
-      {isNil(editPostError) ? null : (
+      {!isNil(queryError) && <p>{t("ERROR")}</p>}
+      {!isNil(editPostError) && (
         <p className={classes.error}>{editPostError.message}</p>
       )}
 
       <div className={classes.list}>
         {map(
-          (post) => (
+          (post: Post) => (
             <div key={post._id} className={classes.card}>
               <h3>{post.postName}</h3>
               <button
@@ -46,7 +58,7 @@ export const EditPostPage: FC = () => {
               </button>
             </div>
           ),
-          posts,
+          userPosts,
         )}
       </div>
 

@@ -1,10 +1,10 @@
 import { useFormContext } from "react-hook-form";
 import { useStyles } from "./styles";
-import type { FormInputProps } from "./types";
+import type { FormInputProperties } from "./types";
 import type { FC } from "react";
 import { isNil } from "lodash/fp";
 
-export const FormInput: FC<FormInputProps> = ({
+export const FormInput: FC<FormInputProperties> = ({
   name,
   placeholder,
   type = "text",
