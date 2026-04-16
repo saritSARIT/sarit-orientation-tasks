@@ -11,14 +11,22 @@ export const postManager = {
   getPostById: async (postId: string): Promise<Post | null> =>
     await postRepository.getPostById(postId),
 
-  updatePost: async (postId: string, data: Post,userId: string,): Promise<Post | null> => {
-    !userId && throwError("Unauthorized");
+  updatePost: async (
+    postId: string,
+    data: Post,
+    userId: string,
+  ): Promise<Post | null> => {
+    String(data.userId) !== userId && throwError("Unauthorized");
 
     return await postRepository.updatePost(postId, data);
   },
 
-  deletePost: async (postId: string, userId: string): Promise<Post | null> => {
-    !userId && throwError("Unauthorized");
+  deletePost: async (
+    postId: string,
+    data: Post,
+    userId: string,
+  ): Promise<Post | null> => {
+    String(data.userId) !== userId && throwError("Unauthorized");
 
     return await postRepository.deletePost(postId);
   },
